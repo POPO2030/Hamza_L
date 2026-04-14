@@ -1,0 +1,18 @@
+@page {
+    size: A4;
+}
+@media print {
+    .bar-print-cat{
+
+        font-size: 40px;
+        margin: 75% 5% 0 40% !important;
+        width:90% !important;
+        /*height: 400px !important;*/
+    }
+   .bar-print{
+       margin: 2% 5% 0 5%;
+       width:90% !important;
+       height: 400px;
+    }
+
+}

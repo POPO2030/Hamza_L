@@ -1,0 +1,142 @@
+.body{
+    margin: 0px;
+    box-sizing: border-box;
+    font-family:'Poppins',sans-serif;
+    }
+    
+    .header-index{
+        padding: 20px;
+        border-radius: 4px;
+          background: rgb(220, 220, 220);
+          font-size: 24px;
+          font-weight: bold;
+          color:rgb(75, 127, 156);
+    }
+    
+    .portlet-header{
+        padding: 20px;
+        border-radius: 4px;
+          background: rgb(220, 220, 220);
+          font-size: 24px;
+          font-weight: bold;
+          color:rgb(75, 127, 156);
+    }
+    
+    .col-12{
+        padding: 10px;
+          font-size: 15px;
+          font-weight: bold;
+    }
+    .row{
+      /* width: 75%; */
+      padding: 10px;
+      border-radius: 4px;
+        font-size: 15px;
+        font-weight: bold;
+        background: rgb(220, 220, 220);
+  }
+  .col-xl-3{
+    align-items:center;
+     justify-content:center;
+    padding: 10px;
+      font-size: 15px;
+      font-weight: bold;
+     
+}
+.card-body{
+  background:rgb(75, 127, 156);
+}
+.card-footer{
+  background:rgb(75, 127, 156);
+  font-size: 15px;
+  font-weight: bold;
+}
+    .table-responsive {
+        padding: 8px 10px;
+    font-size: 15px;
+    font-weight: bold;
+    /* color: rgb(236, 46, 46); */
+    }
+    
+    .custom-cm {
+    background-color: #fffff4;
+    border: 1px solid #cccccc;
+    box-shadow: 1px 1px 10px rgba(0,0,0,0.1);
+    display: none;
+    padding: 10px 0;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 150px;
+    }
+
+    .modal form{
+        width: 100%;
+        padding: 30px 30px 20px;
+        background: #fff;
+        border-radius: 4px;
+        box-shadow: 0 4px 30px rgba(0, 0, 0, 0.5);
+        position: relative;
+      }
+      .modal-header button{
+        width: 3%;
+        height: 2%;
+        font-size: 16px;
+        border: 0;
+        border-radius: 4px;
+      }
+      .form-group{
+        width: 100%;
+        margin: 10px 0;
+        position: relative;
+        top: -25px;
+        justify-content:center;
+      }
+      .form-group label{
+        flex-basis: 28%;
+        font-size: 16px;
+        font-weight: bold;
+    
+      }
+      .form-group input{
+        flex-basis: 100%;
+        background: transparent;
+        border: 1;
+        outline: 0;
+        padding: 10px 0;
+        border-bottom: 1px solid #999;
+        color: rgb(12, 12, 12);
+        font-size: 16px;
+        text-align: center;
+        position: relative;
+      }
+    .custom-cm__item {
+        cursor: pointer;
+        padding: 5px 10px;
+        font-size: 15px;
+          font-weight: bold;
+    }
+    .custom-cm__item:hover {
+        background-color:#c9c6c6;
+        font-size: 17px;
+          font-weight: bold;
+    }
+    .custom-cm hr {
+        margin: 2px 0;
+    }
+    .custom-cm{
+        width: auto ;
+        height: auto;
+        margin: auto;
+        }
+    
+    #searchbox span{
+        display: none;
+        position: absolute;
+        bottom: -28px;
+        left: 14px;
+      font-size: 15px;
+      font-weight: bold;
+      color:red;
+      }
+    

@@ -1,0 +1,145 @@
+<link rel="stylesheet" href="https://cdn.datatables.net/1.13.4/css/jquery.dataTables.min.css">
+<style>
+
+.step-container {
+    display: flex; /* or use 'grid' for grid layout */
+    justify-content: space-around; /* Adjust as needed */
+    flex-wrap: wrap; /* Items wrap to next line if there's not enough space */
+}
+
+.step {
+    flex: 1; /* Flex-grow: Each step takes equal space */
+    max-width: 300px; /* Adjust max width as needed */
+    margin: 10px; /* Add margin between steps */
+    text-align: center; /* Center the content */
+}
+
+/* Add media queries to adjust the layout for smaller screens */
+@media screen and (max-width: 768px) {
+    .step-container {
+        flex-direction: column; /* Stack steps vertically on smaller screens */
+    }
+}
+
+    .clearfix:after {
+    clear: both;
+    content: "";
+    display: block;
+    height: 0;
+}
+
+.container {
+	font-family: 'Lato', sans-serif;
+	width: 1000px;
+	margin: 0 auto;
+}
+
+.wrapper {
+	display: table-cell;
+	height: 400px;
+	vertical-align: middle;
+}
+
+.nav {
+	margin-top: 40px;
+}
+
+.pull-right {
+	float: right;
+}
+
+a, a:active {
+	color: #333;
+	text-decoration: none;
+}
+
+a:hover {
+	color: #999;
+}
+
+/* Breadcrups CSS */
+
+.arrow-steps .step {
+	font-size: 14px;
+	text-align: center;
+	color: #fff;
+	cursor: pointer;
+	margin: 0 3px;
+	padding: 10px 10px 10px 30px;
+	min-width: 180px;
+	float: left;
+	position: relative;
+	background-color: #666;
+	-webkit-user-select: none;
+	-moz-user-select: none;
+	-ms-user-select: none;
+	user-select: none; 
+  transition: background-color 0.2s ease;
+}
+
+.arrow-steps .step:after,
+.arrow-steps .step:before {
+	content: " ";
+	position: absolute;
+	top: 0;
+	right: -17px;
+	width: 0;
+	height: 0;
+	border-top: 19px solid transparent;
+	border-bottom: 17px solid transparent;
+	border-left: 17px solid #666;	
+	z-index: 2;
+  transition: border-color 0.2s ease;
+}
+
+.arrow-steps .step:before {
+	right: auto;
+	left: 0;
+	border-left: 17px solid #fff;	
+	z-index: 0;
+}
+
+.arrow-steps .step:first-child:before {
+	border: none;
+}
+
+.arrow-steps .step:first-child {
+	border-top-left-radius: 4px;
+	border-bottom-left-radius: 4px;
+}
+
+.arrow-steps .step span {
+	position: relative;
+}
+
+.arrow-steps .step span:before {
+	opacity: 0;
+	content: "✔";
+	position: absolute;
+	top: -2px;
+	left: -20px;
+}
+
+.arrow-steps .step.done span:before {
+	opacity: 1;
+	-webkit-transition: opacity 0.3s ease 0.5s;
+	-moz-transition: opacity 0.3s ease 0.5s;
+	-ms-transition: opacity 0.3s ease 0.5s;
+	transition: opacity 0.3s ease 0.5s;
+}
+
+.arrow-steps .step.current {
+	color: black;
+	background-color: #17a2b8;
+}
+
+.arrow-steps .step.current:after {
+	border-left: 17px solid #17a2b8;	
+}
+.current {
+        background-color: #17a2b8;
+        
+    }
+   
+  
+</style>

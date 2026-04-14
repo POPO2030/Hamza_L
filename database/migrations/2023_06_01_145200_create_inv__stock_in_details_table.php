@@ -1,0 +1,39 @@
+<?php
+
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
+
+class CreateInvStockInDetailsTable extends Migration
+{
+    /**
+     * Run the migrations.
+     *
+     * @return void
+     */
+    public function up()
+    {
+        Schema::create('inv__stock_in_details', function (Blueprint $table) {
+            $table->id();
+            $table->integer('inv_stockin_id');
+            $table->integer('product_id');
+            $table->integer('unit_id');
+            $table->integer('quantity');
+            $table->integer('store_id');
+            $table->timestamps();
+
+
+
+        });
+    }
+
+    /**
+     * Reverse the migrations.
+     *
+     * @return void
+     */
+    public function down()
+    {
+        Schema::dropIfExists('inv__stock_in_details');
+    }
+}

@@ -1,0 +1,39 @@
+<?php
+
+namespace App\Http\Requests\CRM;
+
+use Illuminate\Foundation\Http\FormRequest;
+use App\Models\CRM\Place;
+
+class CreatePlaceRequest extends FormRequest
+{
+    /**
+     * Determine if the user is authorized to make this request.
+     *
+     * @return bool
+     */
+    public function authorize()
+    {
+        return true;
+    }
+
+    /**
+     * Get the validation rules that apply to the request.
+     *
+     * @return array
+     */
+    public function rules()
+    {
+        return Place::$rules;
+    }
+
+    public function messages()
+    {
+        return [
+            'name.required' => 'يجب ادخال مكان التخزين',
+            'name.unique' => 'عفوآ...مكان التخزين موجود من قبل',
+            'name.min' => 'يجب ان لا يقل اسم مجموعه المنتجات عن 2 حرف.',
+            'name.max' => 'يجب ان لا يزيد اسم مجموعه المنتجات عن 50 حرف.',
+        ];
+    }
+}
