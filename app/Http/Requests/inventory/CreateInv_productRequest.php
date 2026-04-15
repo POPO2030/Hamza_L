@@ -26,4 +26,13 @@ class CreateInv_productRequest extends FormRequest
     {
         return Inv_product::$rules;
     }
+    public function messages()
+    {
+        return [
+            // 'manual_code.required' => 'يجب ادخال كود المنتج',
+            // 'manual_code.min' => 'كود المنتج  يجب الا يقل عن 2 رقم' ,
+            // 'manual_code.max' => 'كود المنتج يجب الا يزيد عن 8 رقم' ,
+            'manual_code.unique' => 'كود المنتج مكرر' ,
+        ];
+    }
 }

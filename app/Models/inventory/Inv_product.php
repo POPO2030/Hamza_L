@@ -61,7 +61,7 @@ class Inv_product extends Model
      * @var array
      */
     public static $rules = [
-        // 'name' => 'required|min:2|max:200|unique:inv_products',
+        'manual_code' => 'required|unique:inv_products',
         'category_id' => 'required'
     ];
     public static $rules_update = [

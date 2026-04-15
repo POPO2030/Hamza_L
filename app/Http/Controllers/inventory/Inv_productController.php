@@ -67,6 +67,8 @@ class Inv_productController extends AppBaseController
         $cats=Inv_category::pluck('name','id');
         $color_code=Color_code::pluck('name','id');
 
+        // return $colors;
+
         return view('inv_products.create')
         ->with(['cats'=>$cats,
         'units'=>$units,
@@ -80,8 +82,8 @@ class Inv_productController extends AppBaseController
         
 // return $request;
             $input = $request->validate([
-                'name' => 'required|unique:inv_products,name,NULL,id,manual_code,' . $request->input('manual_code'),
-                'manual_code' => 'required|unique:inv_products,manual_code,NULL,id,name,' . $request->input('name'),
+                'name' => 'required|unique:inv_products,name,NULL,id,category_id,' . $request->input('category_id'),
+                'manual_code' => 'required|unique:inv_products,category_id,NULL,id,name,' . $request->input('name'),
             ], [
                 'name.unique' => 'عفوآ... اسم المنتج موجود من قبل',
                 'manual_code.unique' => 'عفوآ... كود المنتج موجود من قبل',
@@ -141,20 +143,6 @@ class Inv_productController extends AppBaseController
                     'color_id' => $request->color_id,
                 ]);
             
-                // $id = $product->color_id;
-            
-                // if (isset($_FILES['img_' . $id]['name']) && is_array($_FILES['img_' . $id]['name'])) {
-                //     for ($z = 0; $z < count($_FILES['img_' . $id]['name']); $z++) {
-                //         if ($_FILES['img_' . $id]['error'][$z] === UPLOAD_ERR_OK) {
-                //             $file_name = $this->upload_file($request->file('img_' . $id)[$z], 'uploads/products/', $x . $z);
-                //             image::create([
-                //                 'img' => $file_name,
-                //                 'product_colors_id' => $product->id,
-                //             ]);
-                //         }
-                //     }
-                // }
-            // }
             if ($request->hasFile('img')) {
 
                 foreach ($request->file('img') as $index => $file) {
@@ -302,10 +290,6 @@ class Inv_productController extends AppBaseController
         if (empty($invProduct)) {
             return redirect(route('invProducts.index'))->with('error', trans('عفوآ...لم يتم العثور على المنتج'));
         }
-        
-        // if( $request->category_id != 2 && $request->category_id != 3 && (empty($request->size_id)) && (empty($request->weight_id))){
-        //     return redirect(route('invProducts.index'))->with('error', trans('عفوآ...مع مجموعه الخيوط يجب ادخال المقاس والسمك'));
-        // }
 // ==============================================================
 if(isset($request->img)){
 $total = 0;
@@ -356,14 +340,6 @@ $input = $request->validate([
 
         $product_color_id = product_color::where('product_id', $id)->select('id')->first();
 
-    // product_color::where('product_id', $invProduct->id)->delete();
- 
-    // for ($x = 0; $x < count($request->color_id); $x++) {
-
-        // $product = product_color::create([
-        //     'product_id' => $invProduct->id,
-        //     'color_id' => $request->color_id,
-        // ]);
         if($request->color_id){
             $product_color_id->update([
                 'color_id' => $request->color_id,
@@ -381,20 +357,6 @@ $input = $request->validate([
                     ]);
                 }
             }
-
-            // if($request->imgs){
-
-            //     image::where('product_colors_id',$product_color_delete)->delete();
-            //     foreach ($request->imgs as $img) {
-            //         Image::create([
-            //             'img' => $img,
-            //             'product_colors_id' => $product->id,
-            //         ]);
-            //     }
-                
-            // }
-            
-
 
     // --------------------------------Start opening_balance--------------------------------------------
         if(isset($request->opening_balance)){
@@ -445,87 +407,75 @@ $input = $request->validate([
     }
 
 
-    public function updateimage($id,Request $request)
-    {
-        // return $request;
-        $invProduct = $this->invProductRepository->find($id);
+    public function updateimage($id, Request $request)
+{
+    // return $request;
+    $invProduct = $this->invProductRepository->find($id);
     //    return $invProduct;
-        if (empty($invProduct)) {
-            return redirect(route('invProducts.index'))->with('error', trans('عفوآ...لم يتم العثور على المنتج'));
+    if (empty($invProduct)) {
+        return redirect(route('invProducts.index'))->with('error', trans('عفوآ...لم يتم العثور على المنتج'));
+    }
+    
+    // ==============================================================
+    if(isset($request->img)){
+        $total = 0;
+
+        foreach ($request->img as $file) {
+            $total += $file->getSize();
         }
+
+        if ($total > 1024 * 1024) {
+            return redirect()->back()->withErrors(['img.*' => 'عفوآ...مجموع حجم الصور تجاوز الحد الأقصى المسموح به (1024 كيلوبايت).']);
+        }
+
+        $input = $request->validate([
+            'img.*' => 'image|mimes:jpeg,png,gif,jpg|max:1024', 
+        ], [
+            'img.*.image' => 'عفوآ...يسمح باختيار صور فقط',
+            'img.*.mimes' => 'عفوأ...صيغ الصور المتاح اختيارها هي (jpeg, png, gif, jpg).',
+            'img.*.max' => 'عفوآ...يجب ان لا تزيد مساحة الصورة عن 1024 كيلو بايت',
+        ]);
+    }
+    // =================================validtion===========================================
+    
+    try {
+        DB::beginTransaction();
+
+        $input = $request->all();
+        $input['updated_by'] = Auth::user()->id;
+        $invProduct = $this->invProductRepository->update($input, $id);
+
+        $product_color_id = product_color::where('product_id', $id)->select('id')->first();
         
-// ==============================================================
-if(isset($request->img)){
-$total = 0;
-
-foreach ($request->img as $file) {
-    $total += $file->getSize();
-}
-
-if ($total > 1024 * 1024) {
-    return redirect()->back()->withErrors(['img.*' => 'عفوآ...مجموع حجم الصور تجاوز الحد الأقصى المسموح به (1024 كيلوبايت).']);
-}
-
-$input = $request->validate([
-    'img.*' => 'image|mimes:jpeg,png,gif,jpg|max:1024', 
-], [
-    'img.*.image' => 'عفوآ...يسمح باختيار صور فقط',
-    'img.*.mimes' => 'عفوأ...صيغ الصور المتاح اختيارها هي (jpeg, png, gif, jpg).',
-    'img.*.max' => 'عفوآ...يجب ان لا تزيد مساحة الصورة عن 1024 كيلو بايت',
-]);
-}
-// =================================validtion===========================================
-try {
-    DB::beginTransaction();
-
-    $input = $request->all();
-    $input['updated_by'] = Auth::user()->id;
-    $invProduct = $this->invProductRepository->update($input, $id);
-
-    $product_color_id = product_color::where('product_id', $id)->select('id')->first();
-// return $product_color_id->id;
-    // product_color::where('product_id', $invProduct->id)->delete();
- 
-        // $product = product_color::create([
-        //     'product_id' => $invProduct->id,
-        //     'color_id' => $request->color_id,
-        // ]);
+        // ======================================== UPDATE COLOR_ID ========================================
+        // Check if color_id is submitted and update it
+        if($request->has('color_id') && $request->color_id != null){
+            product_color::where('product_id', $id)->update([
+                'color_id' => $request->color_id,
+            ]);
+        }
+        // ======================================== END UPDATE COLOR_ID ========================================
 
         if ($request->hasFile('img')) {
             image::where('product_colors_id', $product_color_id->id)->delete();
 
-        foreach ($request->file('img') as $index => $file) {
-            $file_name = $this->upload_file($file, 'uploads/products/', $index);
-            Image::create([
-                'img' => $file_name,
-                'product_colors_id' => $product_color_id->id,
-            ]);
+            foreach ($request->file('img') as $index => $file) {
+                $file_name = $this->upload_file($file, 'uploads/products/', $index);
+                Image::create([
+                    'img' => $file_name,
+                    'product_colors_id' => $product_color_id->id,
+                ]);
+            }
         }
+
+        DB::commit();
+    } catch (\Throwable $th) {
+        throw $th;
+        DB::rollBack();
     }
 
-    // if($request->imgs){
-
-    //     image::where('product_colors_id',$product_color_id->id)->delete();
-    //     foreach ($request->imgs as $img) {
-    //         Image::create([
-    //             'img' => $img,
-    //             'product_colors_id' => $product_color_id->id,
-    //         ]);
-    //     }
-        
-    // }
-
-DB::commit();
-} catch (\Throwable $th) {
-    throw $th;
-    DB::rollBack();
+    return redirect(route('invProducts.index'))->with('success', trans('تنبيه...تم تعديل المنتج بنجاح'));
 }
-
-
-return redirect(route('invProducts.index'))->with('success', trans('تنبيه...تم تعديل المنتج بنجاح'));
-
-
-    }
 
     public function destroy($id)
     {

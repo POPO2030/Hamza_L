@@ -64,13 +64,19 @@
 <!-- Manual Code Field -->
 <div class="form-group col-sm-4">
     {!! Form::label('manual_code', 'كود المنتج <span style="color: red">*</span>', [], false) !!}
-    {!! Form::text('manual_code', null, ['class' => 'form-control','id'=>'manual_code']) !!}
+    {!! Form::text('manual_code', null, ['class' => 'form-control' . ($errors->has('manual_code') ? ' is-invalid' : ''),'id'=>'manual_code']) !!}
+    
+    {{-- Server-side validation error --}}
     @if ($errors->has('manual_code'))
-        <span class="invalid-feedback" role="alert">
+        <span class="invalid-feedback d-block" role="alert">
             <strong>{{ $errors->first('manual_code') }}</strong>
         </span>
     @endif
-    <span id="manual_code-error" class="error-message" style="color: red"></span>
+    
+    {{-- JavaScript validation error --}}
+    <span id="manual_code-error" class="error-message" style="color: red">
+        {{-- {{ $errors->first('manual_code') }} --}}
+    </span>
 </div>
 
 

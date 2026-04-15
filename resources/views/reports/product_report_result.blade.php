@@ -230,7 +230,8 @@
                             @if($stock->get_product_color->color_id == 1)
                             {{$stock->get_product_color->get_color->invcolor_category->name}}
                                 @else
-                            {{$stock->get_product_color->get_color->invcolor_category->name}} - {{$stock->get_product_color->get_color->get_color_code->name}}
+                            {{-- {{$stock->get_product_color->get_color->invcolor_category->name}} - {{$stock->get_product_color->get_color->get_color_code->name}} --}}
+                            {{$stock->get_product_color->get_color->invcolor_category->name}}
                             @endif
                         </td>
 

@@ -85,21 +85,27 @@
                               <tr>
                                   <td>
                                       <div id="color_id-container">
-                                      <select name="color_id" id="color_id" class="form-control searchable">
-                                      
-                                          @foreach($colors as $color)
-                                              @if (isset($table_color_body))
-                                                  @if ($color->id == $table_color_body->color_id)
-                                                      @if($color->get_color_code->id == 1)
-                                                          <option value="{{$color->id}}" selected>{{$color->invcolor_category->name}}</option>
-                                                      @else
-                                                          <option value="{{$color->id}}" selected>{{$color->get_color_code->name.' ('.$color->invcolor_category->name.')'}}</option>
-                                                      @endif
-                                                  
-                                                  @endif
-                                              @endif
-                                          @endforeach
-                                      </select>
+  
+                                          <select name="color_id" id="color_id" class="form-control searchable">
+                                            <option value="" selected>اختر اللون</option>
+                                            @foreach($colors as $color)
+                                                @if (isset($table_color_body))
+                                                    @if ($color->id == $table_color_body->color_id)
+                                                        @if($color->get_color_code->id == 1)
+                                                            <option value="{{$color->id}}" selected>{{$color->invcolor_category->name}}</option>
+                                                        @else
+                                                            <option value="{{$color->id}}" selected>{{$color->get_color_code->name.' ('.$color->invcolor_category->name.')'}}</option>
+                                                        @endif
+                                                    @else
+                                                        @if($color->get_color_code->id == 1)
+                                                            <option value="{{$color->id}}">{{$color->invcolor_category->name}}</option>
+                                                        @else
+                                                            <option value="{{$color->id}}">{{$color->get_color_code->name.' ('.$color->invcolor_category->name.')'}}</option>
+                                                        @endif
+                                                    @endif
+                                                @endif
+                                            @endforeach
+                                        </select>
                                       </div>
                                       @error('color_id')
                                           <div class="text-danger">{{ $message }}</div>
@@ -150,98 +156,5 @@
 @endsection
 
 @push('page_scripts')
-{{-- <script>
-
-    document.addEventListener("DOMContentLoaded", function () {
-
-
-      var categoryElement = document.getElementById("category_id");
-    if (categoryElement) {
-        if (categoryElement.value == 3) {
-            document.querySelectorAll(".container_hid").forEach(function(element) {
-                element.style.display = "none";
-            });
-            document.querySelectorAll(".container_hid_siz").forEach(function(element) {
-                element.style.display = "block";
-            });
-        } else {
-            document.querySelectorAll(".container_hid").forEach(function(element) {
-                element.style.display = "block";
-            });
-            document.querySelectorAll(".container_hid_siz").forEach(function(element) {
-                element.style.display = "none";
-            });
-        }
-    } else {
-        console.error("Element with ID 'category_id' not found.");
-    }
-      // ============================================================================================================
-    document.getElementById('create').addEventListener('submit', function (event) {
-      event.preventDefault();
-     
-      var isValid = true;
-
-// Validate image file inputs with class "img"
-var imgInputs = document.querySelectorAll('.img');
-var totalSize = 0;
-var isValid = true;
-
-for (var i = 0; i < imgInputs.length; i++) {
-    var imgInput = imgInputs[i];
-    var fileList = imgInput.files;
-
-    for (var j = 0; j < fileList.length; j++) {
-        var file = fileList[j];
-        var allowedExtensions = /(\.jpg|\.jpeg|\.png|\.gif)$/i;
-
-        if (!allowedExtensions.exec(file.name)) {
-            var errSpan = imgInput.nextElementSibling; 
-            errSpan.innerHTML = 'عفوآ...صور غير صالحة. يجب أن تكون الصور بصيغة jpeg، png، gif، jpg فقط.';
-            errSpan.style.color = 'red';
-            imgInput.style.borderColor = 'red';
-            isValid = false;
-            break; 
-        } else {
-            imgInput.style.borderColor = '';
-        }
-
-        totalSize += file.size;
-    }
-}
-
-if (totalSize > 1024 * 1024) {
-    var lastImgInput = imgInputs[imgInputs.length - 1];
-    var errSpan = lastImgInput.nextElementSibling; 
-    errSpan.innerHTML = 'عفوآ...مجموع حجم الصور تجاوز الحد الأقصى المسموح به (1024 كيلوبايت).';
-    errSpan.style.color = 'red';
-    lastImgInput.style.borderColor = 'red';
-    isValid = false;
-} else {
-    for (var i = 0; i < imgInputs.length; i++) {
-        imgInputs[i].style.borderColor = '';
-        var errSpan = imgInputs[i].nextElementSibling;
-        errSpan.innerHTML = '';
-    }
-}
-
-
-      if (isValid) {
-        var submitButton = this.querySelector('input[type=submit]');
-        submitButton.disabled = true;
-        this.submit();
-      }
-    });
-
-    document.addEventListener('keyup', function (e) {
-      if (e.key === 'F2' && document.getElementById('create').checkValidity()) {
-        document.querySelector('.save').click();
-      }
-    });
-
-    function removeError(element) {
-      element.style.borderColor = 'none';
-    }
-  });
-</script> --}}
-
+<script src="{{ asset('js/views_js/image_recevie_receipts.js') }}"></script>
 @endpush

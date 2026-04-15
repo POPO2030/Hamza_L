@@ -262,6 +262,14 @@
 
         $(document).on('change', '#store_out', function() {
             var store_out = $(this).val();
+
+             // REMOVE ALL ROWS EXCEPT HEADER ROW
+            var empTab = document.getElementById('empTable');
+            var rowCount = empTab.rows.length;
+        
+            for (var i = rowCount - 1; i > 0; i--) {
+                empTab.deleteRow(i);
+            }
             
             $.ajax({
                 type: 'get',
@@ -388,40 +396,40 @@ $(document).on('change', '.unit_id', function(event) {
 });
             // ================ get store data && quantity in each store for each supplier_id===========================================================
             $(document).on('change', '.supplier_id', function(event) {
-        var supplier_id = $(this).val();
-        var item_id = $(this).closest('tr').find('.item_id').val();
-        var unit_id = $(this).closest('tr').find('.unit_id').val();
-        var item_quantity = $(this).closest('tr').find('.item_quantity');
-        var store_out = $('#store_out').val();
-        var op = '';
-        var res_ele = $(this).closest('tr').find('.stock_quantity');
-        item_quantity.val('');
-        res_ele.val('');
+                var supplier_id = $(this).val();
+                var item_id = $(this).closest('tr').find('.item_id').val();
+                var unit_id = $(this).closest('tr').find('.unit_id').val();
+                var item_quantity = $(this).closest('tr').find('.item_quantity');
+                var store_out = $('#store_out').val();
+                var op = '';
+                var res_ele = $(this).closest('tr').find('.stock_quantity');
+                item_quantity.val('');
+                res_ele.val('');
 
-        $.ajax({
-            type: 'get',
-            url: '{{ url("/get_supplier_stock") }}',
-            data: { 'supplier_id': supplier_id, 'item_id': item_id, 'unit_id': unit_id,'store_out':store_out},
-            success: function(result) {
+                $.ajax({
+                    type: 'get',
+                    url: '{{ url("/get_supplier_stock") }}',
+                    data: { 'supplier_id': supplier_id, 'item_id': item_id, 'unit_id': unit_id,'store_out':store_out},
+                    success: function(result) {
 
-                if (result.length === 0) {
-                    alert('عفوآ...لا يجود مخزون من هذا الصنف');
-                    var empTab = document.getElementById('empTable');
-                    empTab.deleteRow(empTab.rows.length - 1);
-                } else {
-                    for (var i = 0; i < result.length; i++) {
-                        var row = result[i];
-                        if (row.sum > 0) {
-                          res_ele.val(row.sum);
-                        }else{
-                            res_ele.val("0");
+                        if (result.length === 0) {
+                            alert('عفوآ...لا يجود مخزون من هذا الصنف');
+                            var empTab = document.getElementById('empTable');
+                            empTab.deleteRow(empTab.rows.length - 1);
+                        } else {
+                            for (var i = 0; i < result.length; i++) {
+                                var row = result[i];
+                                if (row.sum > 0) {
+                                res_ele.val(row.sum);
+                                }else{
+                                    res_ele.val("0");
+                                }
+                            }
+                            
                         }
                     }
-                    
-                }
-            }
-        });
-    });
+                });
+            });
 
 // ===========================================================================================================================
 });
@@ -429,17 +437,20 @@ $(document).on('change', '.unit_id', function(event) {
 function final_product_test(o) {
         var items = document.getElementsByClassName('item_id');
         var units = document.getElementsByClassName('unit_id');
+        var supplier_id = document.getElementsByClassName('supplier_id');
         var selectedValues = [];
 
           for (var i = 0; i < items.length; i++) {
               var itemValue = items[i].value;
               var unitValue = units[i].value;
-              var combinedValue = itemValue + '-' + unitValue;
+              var supplier_idValue = supplier_id[i].value;
+  
+            var combinedValue = itemValue + '-' + unitValue+ '-' + supplier_idValue;
 
               if (selectedValues.includes(combinedValue)) {
                   var empTab = document.getElementById('empTable');
                   empTab.deleteRow(empTab.rows.length - 1);
-                  alert('عفوآ...اسم الصنف و الوحده تم اختيارهم بالفعل...سوف يتم حذف اخر سطر');
+                  alert('عفوآ...اسم الصنف و الوحده و المورد تم اختيارهم بالفعل...سوف يتم حذف اخر سطر');
                   return;
               }
               selectedValues.push(combinedValue);

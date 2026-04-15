@@ -24,8 +24,6 @@
 
     <div class="content px-3">
 
-        @include('adminlte-templates::common.errors')
-
         <div class="card">
 
             {!! Form::model($invProduct, ['route' => ['invProducts.update', $invProduct->id], 'method' => 'patch','id'=>'create','enctype'=>'multipart/form-data']) !!}
@@ -51,6 +49,6 @@
 
 <!--script blongs to hold submit button from multi submit -->
 @push('page_scripts')
-{{-- <script src="{{ asset('js/views_js/image_recevie_receipts.js') }}"></script> --}}
 <script src="{{ asset('js/views_js/inv_prouducts.js') }}"></script>
+<script src="{{ asset('js/views_js/image_recevie_receipts.js') }}"></script>
 @endpush
