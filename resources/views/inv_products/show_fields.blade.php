@@ -1,11 +1,11 @@
 <!-- Name Field -->
-<div class="col-sm-6">
+<div class="col-sm-2">
     {!! Form::label('name', 'اسم المنتج:') !!}
     <span class="border border-lightgray  rounded text-white p-2 d-block text-center" style="width: 100%;background-color: #e0e4e7 !important; color: #504f4f !important;">{{ $invProduct->name }}</span>
 </div>
 
 <!-- Category Id Field -->
-<div class="col-sm-6">
+<div class="col-sm-2">
     {!! Form::label('category_id', 'مجموعه المنتجات:') !!}
     <span class="border border-lightgray  rounded text-white p-2 d-block text-center" style="width: 100%;background-color: #e0e4e7 !important; color: #504f4f !important;">{{ $invProduct->invproduct_category->name }}</span>
 </div>
@@ -13,7 +13,7 @@
 @if(isset($invProduct) && $invProduct->category_id ==3)
 @if(isset($invProduct->get_finalproduct->name))
 <!-- Category Id Field -->
-<div class="col-sm-6">
+<div class="col-sm-2">
     {!! Form::label('description_id', 'نوع المنتج:') !!}
     <span class="border border-lightgray  rounded text-white p-2 d-block text-center" style="width: 100%;background-color: #e0e4e7 !important; color: #504f4f !important;">{{ $invProduct->get_finalproduct->name }}</span>
 </div>
@@ -21,7 +21,7 @@
 
 <!-- Category Id Field -->
 @if(isset($invProduct->get_product_description->name))
-<div class="col-sm-6">
+<div class="col-sm-2">
     {!! Form::label('description_id', 'وصف المنتج:') !!}
 
     <span class="border border-lightgray  rounded text-white p-2 d-block text-center" style="width: 100%;background-color: #e0e4e7 !important; color: #504f4f !important;">{{ $invProduct->get_product_description->name }}</span>
@@ -30,14 +30,14 @@
 @endif 
 
 <!-- Product Request Field -->
-<div class="col-sm-6">
+<div class="col-sm-2">
     {!! Form::label('product_request', 'حد الطلب:') !!}
     <span class="border border-lightgray  rounded text-white p-2 d-block text-center" style="width: 100%;background-color: #e0e4e7 !important; color: #504f4f !important;">{{ $invProduct->product_request }}</span>
 </div>
 
-@if(isset($invProduct) && $invProduct->category_id !=3)
+{{-- @if(isset($invProduct) && $invProduct->category_id !=3)
 <!-- Product Request Field -->
-<div class="col-sm-6">
+<div class="col-sm-2">
     {!! Form::label('size_id', 'المقاس:') !!}
 
     <span class="border border-lightgray  rounded text-white p-2 d-block text-center" style="width: 100%;background-color: #e0e4e7 !important; color: #504f4f !important;height: 42px;">
@@ -47,7 +47,7 @@
     </span>
 </div>
 <!-- Product Request Field -->
-<div class="col-sm-6">
+<div class="col-sm-2">
     {!! Form::label('weight_id', 'السمك:') !!}
     <span class="border border-lightgray  rounded text-white p-2 d-block text-center" style="width: 100%;background-color: #e0e4e7 !important; color: #504f4f !important;height: 42px;">
         @if(isset($invProduct->get_weight))
@@ -58,7 +58,7 @@
 </div>
 
 <!-- Product Request Field -->
-<div class="col-sm-6">
+<div class="col-sm-2">
     {!! Form::label('brand_id', 'الماركه:') !!}
 
     <span class="border border-lightgray  rounded text-white p-2 d-block text-center" style="width: 100%;background-color: #e0e4e7 !important; color: #504f4f !important;height: 42px; ">
@@ -68,10 +68,10 @@
     </span>
 </div>
 {{-- ========================================================================================= --}}
-@else
+{{-- @else --}}
 {{-- ========================================================================================== --}}
 <!-- Product Request Field -->
-<div class="col-sm-6" style="display: none;">
+{{-- <div class="col-sm-2" style="display: none;">
     {!! Form::label('size_id', 'المقاس:') !!}
 
     <span class="border border-lightgray  rounded text-white p-2 d-block text-center" style="width: 100%;background-color: #e0e4e7 !important; color: #504f4f !important;height: 42px;">
@@ -81,7 +81,7 @@
     </span>
 </div>
 <!-- Product Request Field -->
-<div class="col-sm-6" style="display: none;">
+<div class="col-sm-2" style="display: none;">
     {!! Form::label('weight_id', 'السمك:') !!}
     <span class="border border-lightgray  rounded text-white p-2 d-block text-center" style="width: 100%;background-color: #e0e4e7 !important; color: #504f4f !important;height: 42px;">
         @if(isset($invProduct->get_weight))
@@ -92,7 +92,7 @@
 </div>
 
 <!-- Product Request Field -->
-<div class="col-sm-6" style="display: none;">
+<div class="col-sm-2" style="display: none;">
     {!! Form::label('brand_id', 'الماركه:') !!}
 
     <span class="border border-lightgray  rounded text-white p-2 d-block text-center" style="width: 100%;background-color: #e0e4e7 !important; color: #504f4f !important;height: 42px; ">
@@ -102,9 +102,9 @@
     </span>
 </div>
 
-@endif
+@endif  --}}
 <!-- Created By Field -->
-<div class="col-sm-6">
+<div class="col-sm-2">
     {!! Form::label('creator_id', 'انشئ العمليه:') !!}
     @if(!empty($invProduct->get_user->name))
     <span class="border border-lightgray  rounded text-white p-2 d-block text-center" style="width: 100%;background-color: #e0e4e7 !important; color: #504f4f !important;">{{ $invProduct->get_user->name }}</span>
@@ -112,14 +112,14 @@
 </div>
 
 <!-- Created At Field -->
-<div class="col-sm-6">
+<div class="col-sm-2">
     {!! Form::label('created_at', 'تم الانشاء:') !!}
     <span class="border border-lightgray  rounded text-white p-2 d-block text-center" style="width: 100%;background-color: #e0e4e7 !important; color: #504f4f !important;">{{ $invProduct->created_at }}</span>
 </div>
 
 @if(!empty($invProduct->get_user_update->name))
 <!-- Updated By Field -->
-<div class="col-sm-6">
+<div class="col-sm-2">
     {!! Form::label('updated_by', 'القائم بالتعديل:') !!}
     @if(!empty($invProduct->get_user_update->name))
     <span class="border border-lightgray  rounded text-white p-2 d-block text-center" style="width: 100%;background-color: #e0e4e7 !important; color: #504f4f !important;">{{ $invProduct->get_user_update->name }}</span>
@@ -127,7 +127,7 @@
 </div>
 
 <!-- Updated At Field -->
-<div class="col-sm-6">
+<div class="col-sm-2">
     {!! Form::label('updated_at', 'تم التحديث:') !!}
     <span class="border border-lightgray  rounded text-white p-2 d-block text-center" style="width: 100%;background-color: #e0e4e7 !important; color: #504f4f !important;">{{ $invProduct->updated_at }}</span>
 </div>

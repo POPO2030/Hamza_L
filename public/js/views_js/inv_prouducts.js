@@ -88,31 +88,6 @@ document.addEventListener("DOMContentLoaded", function () {
       }
     });
 
-    // document.getElementById('product_name').addEventListener('blur', function () {
-    //   var productname = this.value;
-    //   if (productname.length === '') {
-    //     document.getElementById('product_name-error').innerHTML = 'عفوآ...يجب إدخال اسم المنتج';
-    //     this.style.borderColor = 'red';
-    //   } else {
-    //     document.getElementById('product_name-error').innerHTML = '';
-    //     this.style.borderColor = '';
-    //   }
-    // });
-
-    // document.getElementById('product_request').addEventListener('blur', function () {
-    //   var product_request = this.value;
-    //   if (product_request.length === '') {
-    //     document.getElementById('product_request-error').innerHTML = 'عفوآ...يجب إدخال حد الطلب وأن لا يقل عن  رقم ولا يزيد عن 5 ارقام';
-    //     this.style.borderColor = 'red';
-    //   } else {
-    //     document.getElementById('product_request-error').innerHTML = '';
-    //     this.style.borderColor = '';
-    //   }
-    // });
-
-    function removeError(element) {
-      element.style.borderColor = 'none';
-    }
   });
 
   function handleProductChange1() {
