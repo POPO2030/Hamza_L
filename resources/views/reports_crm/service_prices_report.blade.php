@@ -50,14 +50,16 @@
                 </select>
             </div>
 
-            <div class="form-group col-sm-4">
+             
+
+            {{-- <div class="form-group col-sm-4">
                 {!! Form::label('branch', 'الفرع :') !!}
                 <select name="branch" class="form-control searchable">
                     <option value="all">الكل</option>
                     <option value="1">جسر السويس</option>
                     <option value="2">بلقس</option>
                 </select>
-            </div>
+            </div> --}}
 
 
             {{-- <div class="form-group col-sm-4">
@@ -74,6 +76,9 @@
                 <span id="serviceError" style="color: red;"></span> 
             </div>
 
+              <div class="form-group col-sm-4">
+            </div>
+            
             <div class="form-group col-sm-4">
                 {!! Form::label('from', 'من:') !!}
                 {{ Form::date('from',null,['placeholder' => 'من','class'=> 'form-control','id'=>'from', 'data-placeholder'=>"من", 'style'=>"width: 100%"]) }}

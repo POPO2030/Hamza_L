@@ -124,7 +124,7 @@
                                 <th width="12%">الإجمالي</th>
                                 <th width="8%">رقم الفاتورة</th>
                                 <th width="15%">اسم العميل</th>
-                                <th width="10%">الفرع</th>
+                                {{-- <th width="10%">الفرع</th> --}}
                                 <th width="11%">التاريخ</th>
                             </tr>
                         </thead>
@@ -139,7 +139,7 @@
                                     <td><span class="badge badge-primary" style="font-size: 12px;padding:5px;">{{ number_format($result['total'], 2) }}</span></td>
                                     <td>{{ $result['invoice_id'] }}</td>
                                     <td>{{ $result['customer_name'] }}</td>
-                                    <td>{{ $result['branch'] }}</td>
+                                    {{-- <td>{{ $result['branch'] }}</td> --}}
                                     <td>{{ $result['date'] }}</td>
                                 </tr>
                             @endforeach

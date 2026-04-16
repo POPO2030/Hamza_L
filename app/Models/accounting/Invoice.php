@@ -39,7 +39,7 @@ class Invoice extends Model
         // 'amount_Increase',
         'tax',
         'discount_notice',
-        'branch',
+        // 'branch',
         'amount_net',
         'comment',
         'creator_id',
@@ -54,17 +54,17 @@ class Invoice extends Model
         // 'amount_Increase' => 'double',
         'tax' => 'double',
         'discount_notice' => 'double',
-        'branch' => 'integer',
+        // 'branch' => 'integer',
         'amount_net' => 'double',
         'comment' => 'string',
         'creator_id' => 'integer',
         'date' => 'date',
     ];
 
-    public function getBranchNameAttribute()
-    {
-        return $this->branch == 1 ? 'جسر السويس' : ($this->branch == 2 ? 'بلقس' : 'غير معروف');
-    }
+    // public function getBranchNameAttribute()
+    // {
+    //     return $this->branch == 1 ? 'جسر السويس' : ($this->branch == 2 ? 'بلقس' : 'غير معروف');
+    // }
 
     protected function serializeDate(DateTimeInterface $date)
     {

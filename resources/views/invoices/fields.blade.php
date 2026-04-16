@@ -41,9 +41,9 @@
     {!! Form::label('date', 'تاريخ الفاتوره:') !!}
     {!! Form::date('date', date('Y-m-d'), ['class' => 'form-control', 'id' => 'date', 'name' => 'date']) !!}
 </div>
-<div class="form-group col-sm-3">
+{{-- <div class="form-group col-sm-3">
     {!! Form::label('branch', 'الفرع:') !!}
-    {!! Form::select('branch', ['1' => 'جسر السويس','2' => 'بلقس'], null, ['class' => 'form-control', 'id' => 'branch']) !!}</div>
+    {!! Form::select('branch', ['1' => 'جسر السويس','2' => 'بلقس'], null, ['class' => 'form-control', 'id' => 'branch']) !!}</div> --}}
 
 {{-- <!-- Piece Price Field -->
 <div class="form-group col-sm-3" style="display: none;">

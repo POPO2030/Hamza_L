@@ -53,19 +53,19 @@
                         String(date.getSeconds()).padStart(2, '0');
                 }
             },
-            { 
-                data: 'branch', 
-                name: 'branch',
-                render: function(data) {
-                    // Added branch display logic
-                    if (data == 1) {
-                        return 'جسر السويس';
-                    } else if (data == 2) {
-                        return 'بلقس';
-                    }
-                    return data; // Fallback for other values
-                }
-            },
+            // { 
+            //     data: 'branch', 
+            //     name: 'branch',
+            //     render: function(data) {
+            //         // Added branch display logic
+            //         if (data == 1) {
+            //             return 'جسر السويس';
+            //         } else if (data == 2) {
+            //             return 'بلقس';
+            //         }
+            //         return data; // Fallback for other values
+            //     }
+            // },
             {data: 'action', name: 'action', orderable: false, searchable: false},
         ],
         order: [[1, 'desc']]

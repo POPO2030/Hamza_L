@@ -50,18 +50,18 @@
                 </select>
             </div>
 
-            <div class="form-group col-sm-4">
+            {{-- <div class="form-group col-sm-4">
                 {!! Form::label('branch', 'الفرع :') !!}
                 <select name="branch" class="form-control searchable">
                     <option value="all">الكل</option>
                     <option value="1">جسر السويس</option>
                     <option value="2">بلقس</option>
                 </select>
-            </div>
+            </div> --}}
 
 
-            <div class="form-group col-sm-4">
-            </div>
+            {{-- <div class="form-group col-sm-4">
+            </div> --}}
 
             <div class="form-group col-sm-4">
                 {!! Form::label('from', 'من:') !!}
@@ -71,8 +71,8 @@
                 {!! Form::label('to', 'الى:') !!}
                 {{ Form::date('to',null,['placeholder' => 'الى','class'=> 'form-control','id'=>'to', 'data-placeholder'=>"الى", 'style'=>"width: 100%"]) }}
             </div>        
-            <div class="form-group col-sm-4">
-            </div>
+            {{-- <div class="form-group col-sm-4">
+            </div> --}}
 
             <div class="form-group col-sm-4 text-center" style="margin-top:30px;">
                 <input type="submit" value="بحث" class="btn btn-primary col-12">

@@ -20,9 +20,9 @@ class InvoiceDataTable extends DataTable
             $dataTable = new EloquentDataTable($query);
 
             return $dataTable
-                ->editColumn('branch', function ($row) {
-                    return $row->branch == 1 ? 'جسر السويس' : ($row->branch == 2 ? 'بلقس' : 'غير معروف');
-                })
+                // ->editColumn('branch', function ($row) {
+                //     return $row->branch == 1 ? 'جسر السويس' : ($row->branch == 2 ? 'بلقس' : 'غير معروف');
+                // })
                 ->addColumn('action', 'invoices.datatables_actions');
         }
     /**
@@ -87,7 +87,7 @@ class InvoiceDataTable extends DataTable
             // "المبلغ_المعدل"=>['name'=>'amount_edit','data'=>'amount_edit'],
             // "الخصم"=>['name'=>'discount','data'=>'discount'],
             "الاجمالى"=>['name'=>'amount_net','data'=>'amount_net'],
-            "الفرع" => ['name' => 'branch', 'data' => 'branch'],
+            // "الفرع" => ['name' => 'branch', 'data' => 'branch'],
 
             'creator_id'=>new \Yajra\DataTables\Html\Column([
                 'title' => 'القائم بالإنشاء', 

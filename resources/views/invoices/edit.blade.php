@@ -107,13 +107,13 @@
                             {!! Form::label('customer_id', 'العميل:') !!}
                             <span class="border border-lightgray  rounded text-white p-2 d-block text-center" style="width: 100%;background-color: #e0e4e7 !important; color: #504f4f !important;font-weight: bold;">{{ $invoice->get_customer->name }}</span>
                         </div>
-                        <div class="col-sm-3">
+                        {{-- <div class="col-sm-3">
                             {!! Form::label('branch', 'الفرع:') !!}
                             {!! Form::select('branch', [1 => 'جسر السويس', 2 => 'بلقس'], $invoice->branch, [
                                 'class' => 'form-control',
                                 
                             ]) !!}
-                        </div>
+                        </div> --}}
                         <div class="col-sm-3">
                             {!! Form::label('invoice_id', ' اذن رقم:') !!}
                             <span class="border border-lightgray  rounded text-white p-2 d-block text-center" style="width: 100%;background-color: #e0e4e7 !important; color: #504f4f !important;font-weight: bold;">{{ $invoice->id}}</span>

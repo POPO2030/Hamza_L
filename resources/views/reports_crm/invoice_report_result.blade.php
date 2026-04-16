@@ -239,7 +239,7 @@
             <thead>
                 <tr style=" text-align: center; font-weight: bold;">
                     <th>العميل</th>
-                    <th>الفرع</th>
+                    {{-- <th>الفرع</th> --}}
                     <th>الفاتورة</th>
                     <th>الوزن</th>
                     <th>العدد</th>
@@ -256,13 +256,13 @@
             @foreach ($result as $invoice)
                 <tr>
                     <td>{{$invoice->get_customer->name}}</td>
-                    <td>
+                    {{-- <td>
                         @if ($invoice->branch == 1)
                             جسر السويس
                         @elseif($invoice->branch == 2)
                             بلقس
                         @endif
-                    </td>
+                    </td> --}}
                     <td>{{$invoice->id}}</td>
                         <!-- Calculate Weight -->
                         <td>

@@ -33,9 +33,9 @@ class ReceiveReceiptDataTable extends DataTable
             }
             return 'N/A'; // Handle null cases
         })
-        ->editColumn('branch', function ($row) {
-            return $row->branch == 1 ? 'جسر السويس' : ($row->branch == 2 ? 'بلقس' : '');
-        })
+        // ->editColumn('branch', function ($row) {
+        //     return $row->branch == 1 ? 'جسر السويس' : ($row->branch == 2 ? 'بلقس' : '');
+        // })
         ->addColumn('action', 'receive_receipts.datatables_actions');
     }
 
@@ -119,7 +119,7 @@ class ReceiveReceiptDataTable extends DataTable
                ]),
 
             "تاريخ_الانشاء"=>['name'=>'created_at','data'=>'created_at'],
-            "الفرع"=>['name'=>'branch','data'=>'branch'],
+            // "الفرع"=>['name'=>'branch','data'=>'branch'],
 
         ];
     }

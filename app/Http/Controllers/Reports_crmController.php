@@ -552,9 +552,9 @@ public function invoice_report_result(Request $request)
     ]);
     
 
-    if ($request->branch !=='all') {
-        $result=$result->where('branch',$request->branch);
-    }
+    // if ($request->branch !=='all') {
+    //     $result=$result->where('branch',$request->branch);
+    // }
 
     if ($request->customer_id !=='all') {
         $result = $result->where('customer_id', $request->customer_id);
@@ -716,9 +716,9 @@ public function invoice_report_result(Request $request)
         $query = Invoice::with($withRelations);
 
 
-        if ($request->branch !== 'all') {
-            $query->where('branch', $request->branch);
-        }
+        // if ($request->branch !== 'all') {
+        //     $query->where('branch', $request->branch);
+        // }
 
         if ($request->customer_id !== 'all') {
             $query->where('customer_id', $request->customer_id);
@@ -781,8 +781,8 @@ public function invoice_report_result(Request $request)
                             'price' => $service->service_price,
                             'repetition' => 0,
                             'invoice_id' => $invoice->id,
-                            'branch' => $invoice->branch == 1 ? 'جسر السويس' : 
-                                        ($invoice->branch == 2 ? 'بلقس' : 'غير معروف'),
+                            // 'branch' => $invoice->branch == 1 ? 'جسر السويس' : 
+                            //             ($invoice->branch == 2 ? 'بلقس' : 'غير معروف'),
                             'customer_name' => $invoice->get_customer->name,
                             'date' => $invoice->date->format('Y-m-d'),
                             'calculation_method' => $invoice->calculation_method

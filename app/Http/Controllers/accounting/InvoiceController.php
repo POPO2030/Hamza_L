@@ -143,7 +143,7 @@ class InvoiceController extends AppBaseController
             $input['date'] = $request->date ?? now();
             $input['discount_notice'] = $request->discount_notice_output;
             $input['tax'] = $request->tax_output;
-            $input['season'] = ($currentDatabase == "laundry_erp_25") ? "new" : "old";
+            $input['season'] = ($currentDatabase == "madco_26") ? "new" : "old";
 
             // Create invoice directly instead of using repository
             $invoice = new Invoice();

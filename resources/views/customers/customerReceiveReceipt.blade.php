@@ -61,7 +61,7 @@
                     <th scope="col" style="text-align: inherit;">الوزن الفعلى</th>
                     <th scope="col" style="text-align: inherit;">العدد الفعلى</th>
                     <th scope="col" style="text-align: inherit;">التاريخ</th>
-                    <th scope="col" style="text-align: inherit;">الفرع</th>
+                    {{-- <th scope="col" style="text-align: inherit;">الفرع</th> --}}
                     <th scope="col" style="text-align: inherit;"> الغسلات</th>
                   </tr>
                 </thead>

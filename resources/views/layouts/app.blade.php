@@ -459,7 +459,7 @@ input[type="text"],
           </div>
 
           <div class="collapse navbar-collapse justify-content-end">
-            @if (session('database') == 'laundry_erp')
+            @if (session('database') == 'madco')
               <div class="alert-container">
                 <div class="alert-content ">
                   <i class="material-icons">notification_important</i>

@@ -164,10 +164,10 @@
     <span id="errorSpan" class="error" style="color: red;font-weight:bold"></span>
 </div>
 
-<div class="form-group col-sm-3">
+{{-- <div class="form-group col-sm-3">
     {!! Form::label('branch', 'الفرع:') !!}
     {!! Form::select('branch', ['1' => 'جسر السويس','2' => 'بلقس'], null, ['class' => 'form-control', 'id' => 'branch']) !!}
-</div>
+</div> --}}
 
 
 {{-- ==========================start Modal =================== --}}
