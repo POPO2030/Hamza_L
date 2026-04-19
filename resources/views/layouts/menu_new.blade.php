@@ -16,7 +16,7 @@
       <div class="logo">
 
         <a href="{{ route('home') }}" class="simple-text logo-normal">
-          <img src="{{asset('assets/img/faces/lundry.png') }}" style="width: 100px;">
+          <img src="{{asset('assets/img/faces/lundry.png') }}" style="width: 120px;">
         </a>
       </div>
       <div class="sidebar-wrapper">

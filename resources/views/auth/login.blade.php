@@ -145,7 +145,7 @@
                 </div>
                 <div class="card-body" style="direction: rtl">
                     <div class="text-center mb-4">
-                        <img src="{{asset('assets/img/faces/lundry.png') }}" alt="Logo" class="img-fluid" style="max-width: 100px;"> 
+                        <img src="{{asset('assets/img/faces/lundry.png') }}" alt="Logo" class="img-fluid" style="max-width: 120px;"> 
                     </div>
                     
                   {{-- <p class="card-description text-center">Or Be Classical</p> --}}

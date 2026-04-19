@@ -30,13 +30,20 @@
 </div>
 
 <!-- Calculation Method Field -->
-<div class="form-group col-sm-3">
-    {!! Form::label('calculation_method', 'طريقة الحساب:') !!}
-    <select name="calculation_method" id="calculation_method" class="form-control" required>
+
+{{-- طريقة الحساب --}}
+
+<!-- Calculation Method Field -->
+{{-- <div class="form-group col-sm-3"> --}}
+    {{-- {!! Form::label('calculation_method', 'طريقة الحساب:') !!} --}}
+    <select hidden name="calculation_method" id="calculation_method" class="form-control" required>
         <option value="kilo">بالكيلو</option>
-        <option value="piece">بالقطعة</option>
+        {{-- <option value="piece">بالقطعة</option> --}}
     </select>
-</div>
+{{-- </div> --}}
+
+{{-- طريقة الحساب --}}
+
 <div class="form-group col-sm-3">
     {!! Form::label('date', 'تاريخ الفاتوره:') !!}
     {!! Form::date('date', date('Y-m-d'), ['class' => 'form-control', 'id' => 'date', 'name' => 'date']) !!}
