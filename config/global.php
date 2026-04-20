@@ -440,6 +440,7 @@ return[
         'report2.product_report'=>'تقرير كارته صنف المنتجات',
         'report2.total_Products_report'=>'اجمالي رصيد مخزن المستلزمات',
         'report2.model_reports'=>'تقرير بيان الاوردرات',
+        'report2.wash_chemical_report'=>'تقرير كيماويات الغسله',
   
     ]
 ]

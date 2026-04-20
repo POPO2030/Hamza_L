@@ -481,6 +481,9 @@ Route::post('product_report_result', 'ReportsController@product_report_result')-
 Route::get('total_Products_report/','ReportsController@total_Products_report')->name('total_Products_report')->middleware('can:report2.total_Products_report');
 Route::post('total_Products_report_result/','ReportsController@total_Products_report_result')->middleware('can:report2.total_Products_report');
 
+Route::get('wash_chemical_report/','ReportsController@wash_chemical_report')->name('wash_chemical_report')->middleware('can:report2.wash_chemical_report');
+Route::post('wash_chemical_report_result/','ReportsController@wash_chemical_report_result')->middleware('can:report2.wash_chemical_report');
+
 Route::get('treasuries_report', ['as'=>'treasuries_report', 'uses'=>'Reports_crmController@treasuries_report'])->middleware('can:report1.treasuries_report');
 Route::post('treasuries_report_result', ['as'=>'treasuries_report_result', 'uses'=>'Reports_crmController@treasuries_report_result'])->middleware('can:report1.treasuries_report');
 

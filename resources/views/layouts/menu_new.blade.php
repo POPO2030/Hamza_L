@@ -732,7 +732,7 @@
                  
 
                   <div class="collapse {{cuurentroute('product_report','show')}} {{cuurentroute('total_Products_report','show')}} {{cuurentroute('treasuries_report','show')}}{{cuurentroute('customer_account_report','show')}}
-                  {{cuurentroute('supplier_account_report','show')}} {{cuurentroute('invoice_report','show')}} {{cuurentroute('service_prices_report','show')}}" id="pagesExamples7">
+                  {{cuurentroute('supplier_account_report','show')}} {{cuurentroute('supplier_account_report','show')}} {{cuurentroute('invoice_report','show')}} {{cuurentroute('service_prices_report','show')}}" id="pagesExamples7">
                     <ul class="nav">
       
                       
@@ -752,6 +752,15 @@
                         class="nav-link {{ Request::is('total_Products_report*') ? 'active' : '' }}" >
                         <i class="fas fa-search"></i>
                         <span class="menu-item-text">تقرير رصيد المنتجات</span>
+                        </a>
+                    @endcan
+                      </li>
+                      <li class="nav-item {{cuurentroute('wash_chemical_report','active')}}">
+                    @can('report2.wash_chemical_report')
+                        <a href="{{ route('wash_chemical_report') }}"
+                        class="nav-link {{ Request::is('wash_chemical_report*') ? 'active' : '' }}" >
+                        <i class="fas fa-search"></i>
+                        <span class="menu-item-text">تقرير كيماويات الغسله</span>
                         </a>
                     @endcan
                       </li>
