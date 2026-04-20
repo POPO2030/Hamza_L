@@ -177,7 +177,6 @@ public function total_Products_report_result(Request $request)
     // return $request;
     $stock = Inv_controlStock::with([
             'get_unit_content',
-            'get_store:name,id',
             'get_unit:name,id',
             'get_supplier:name,id',
             'get_product_color.get_color:name,id,colorCategory_id,color_code_id',
@@ -205,56 +204,41 @@ public function total_Products_report_result(Request $request)
         if ($request->supplier_id !== 'all') {
             $stock = $stock->where('supplier_id', $request->supplier_id);
         }
-        if ($request->work_order_id !== 'all') {
-            $stock = $stock->where('work_order_id', $request->work_order_id);
 
-        }
         if ($request->color_id !== 'all') {
             $stock = $stock->whereHas('get_product_color', function ($query) use ($request) {
                 $query->where('color_id', $request->color_id);
             });
         }
 
-        if ($request->final_product_id !=='all') {
-            $stock = $stock->whereHas('get_product_color.get_product', function ($query) use ($request) {
-                $query->where('final_product_id', $request->final_product_id);
-            });
-
+        // if (isset($request->from)) {
+        //         $result=$stock->where('created_at','>=',$request->from);
+        // }
+        // if (isset($request->to)) {
+        //         $result=$stock->where('created_at','<=',$request->to.' 23:59:59');
+        // } 
+        if ($request->filled('from')) {
+            $stock->where('created_at', '>=', $request->from);
         }
-
-        if (isset($request->from)) {
-                $result=$stock->where('created_at','>=',$request->from);
+        
+        if ($request->filled('to')) {
+            $stock->where('created_at', '<=', $request->to . ' 23:59:59');
         }
-        if (isset($request->to)) {
-                $result=$stock->where('created_at','<=',$request->to.' 23:59:59');
-        } 
 
         // $result=$stock->groupBy('product_id')
         // ->select(\DB::raw('sum(quantity_in)-sum(quantity_out) as sum ,product_id'),'store_id','invimport_export_id','unit_id','supplier_id','customer_id')
         // ->get();
-        $result = $stock->select(
-            'product_id',
-            \DB::raw('SUM(quantity_in) - SUM(quantity_out) as sum'),'store_id','invimport_export_id','unit_id','customer_id'
-        )
-        ->groupBy('product_id')
-        ->get();
-    
-    $productIds = $result->pluck('product_id');
-    
-    $suppliers = Inv_controlStock::whereIn('product_id', $productIds)
-        ->with('get_supplier:id,name')
-        ->get()
-        ->groupBy('product_id');
-    
-    $result = $result->map(function ($item) use ($suppliers) {
-        $item->suppliers = isset($suppliers[$item->product_id])
-            ? $suppliers[$item->product_id]
-                ->pluck('get_supplier.name')
-                ->unique()
-                ->values()
-            : [];
-        return $item;
-    });
+        $result = $stock->select('product_id',\DB::raw('SUM(quantity_in) - SUM(quantity_out) as sum'),'unit_id')->groupBy('product_id')->get();
+      
+        $productIds = $result->pluck('product_id');
+        
+        $suppliers = Inv_controlStock::whereIn('product_id', $productIds)->with('get_supplier:id,name')->get()->groupBy('product_id');
+        
+        $result = $result->map(function ($item) use ($suppliers) {
+            $item->suppliers = isset($suppliers[$item->product_id])? $suppliers[$item->product_id]->pluck('get_supplier.name')->unique()->values(): [];
+            $item->stores = isset($suppliers[$item->product_id])? $suppliers[$item->product_id]->pluck('get_store.name')->unique()->values(): [];
+            return $item;
+        });
         // return $result;
 
         if ($request->balance !== 'all') {

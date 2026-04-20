@@ -92,61 +92,149 @@ class Inv_importOrderController extends AppBaseController
      *
      * @return Response
      */
-    public function store(CreateInv_importOrderRequest $request)
-    {
-        // return $request;
-        // =====================================================================
-        if(! $request->unit_id){
-            Flash::error('لم يتم اختيار اصناف');
-            return redirect(route('invImportOrders.index'));
-        }
-        try {
-            DB::beginTransaction();
-// -----------------insert Stock in-----------------
+//     public function store(CreateInv_importOrderRequest $request)
+//     {
+//         // return $request;
+//         // =====================================================================
+//         if(! $request->unit_id){
+//             Flash::error('لم يتم اختيار اصناف');
+//             return redirect(route('invImportOrders.index'));
+//         }
+//         try {
+//             DB::beginTransaction();
+// // -----------------insert Stock in-----------------
 
-        $input = $request->all();
+//         $input = $request->all();
    
           
-          $input['user_id']=Auth::user()->id;
-          $input['status']='pending';
-          $invImportOrder = $this->invImportOrderRepository->create($input);
+//           $input['user_id']=Auth::user()->id;
+//           $input['status']='pending';
+//           $invImportOrder = $this->invImportOrderRepository->create($input);
   
-  // -----------------insert StockIn Details-----------------
-          $data2=[];
-          for ($i=0; $i <count($request->product_id) ; $i++) { 
-            $productID =product_color::where('id',$request->product_id[$i])->pluck('product_id');
-            $product_price = Inv_product::where('id',$productID)->select('product_price')->first()->product_price;
-              $total_product_price = $product_price * $request->quantity[$i];
+//   // -----------------insert StockIn Details-----------------
+//           $data2=[];
+//           for ($i=0; $i <count($request->product_id) ; $i++) { 
+//             $productID =product_color::where('id',$request->product_id[$i])->pluck('product_id');
+//             $product_price = Inv_product::where('id',$productID)->select('product_price')->first()->product_price;
+//               $total_product_price = $product_price * $request->quantity[$i];
     
-              $data2[$i]=[
-                  'invimport_id'=>$invImportOrder->id,
-                  'product_id'=>$request->product_id[$i],
-                  'unit_id'=>$request->unit_id[$i],
-                  'quantity'=>$request->quantity[$i],
-                //   'product_price'=>$product_price,
-                //   'total_product_price'=>$product_price * $request->quantity[$i],
-                  'store_id'=>$request->store_id[$i],
-                  'created_at'=>$invImportOrder->created_at,
-              ];
+//               $data2[$i]=[
+//                   'invimport_id'=>$invImportOrder->id,
+//                   'product_id'=>$request->product_id[$i],
+//                   'unit_id'=>$request->unit_id[$i],
+//                   'quantity'=>$request->quantity[$i],
+//                 //   'product_price'=>$product_price,
+//                 //   'total_product_price'=>$product_price * $request->quantity[$i],
+//                   'store_id'=>$request->store_id[$i],
+//                   'created_at'=>$invImportOrder->created_at,
+//               ];
 
-          }
-          Inv_importorder_details::insert($data2);
+//           }
+//           Inv_importorder_details::insert($data2);
   
 
      
        
-        DB::commit();
-        } catch (\Throwable $th) {
-            DB::rollBack();
-            throw $th;
+//         DB::commit();
+//         } catch (\Throwable $th) {
+//             DB::rollBack();
+//             throw $th;
         
-        }
-        // =====================================================================
-        return redirect(route('invImportOrders.index'))->with('success', trans('تنبيه...تم حفظ اذن توريد بضاعه بنجاح'));
+//         }
+//         // =====================================================================
+//         return redirect(route('invImportOrders.index'))->with('success', trans('تنبيه...تم حفظ اذن توريد بضاعه بنجاح'));
+//     }
+
+public function store(CreateInv_importOrderRequest $request)
+{
+    if (! $request->unit_id) {
+        Flash::error('لم يتم اختيار اصناف');
+        return redirect(route('invImportOrders.index'));
     }
 
+    try {
+        DB::beginTransaction();
 
+        $input = $request->all();
+        $input['user_id'] = Auth::id();
+        $input['status'] = 'Approved'; // بقى Approved مباشرة
 
+        $invImportOrder = $this->invImportOrderRepository->create($input);
+
+        // ================= تفاصيل الإذن =================
+        $detailsData = [];
+        $stockData   = [];
+        $totalInvoice = 0;
+
+        for ($i = 0; $i < count($request->product_id); $i++) {
+
+            // ✔️ fix pluck
+            $productColor = product_color::find($request->product_id[$i]);
+            $productID = $productColor->product_id;
+
+            // ✔️ سعر المنتج
+            $product = Inv_product::find($productID);
+            $product_price = $product->product_price ?? 0;
+
+            $qty = $request->quantity[$i];
+            $total_product_price = $product_price * $qty;
+
+            $totalInvoice += $total_product_price;
+
+            // ================= details =================
+            $detailsData[] = [
+                'invimport_id'        => $invImportOrder->id,
+                'product_id'          => $request->product_id[$i],
+                'unit_id'             => $request->unit_id[$i],
+                'quantity'            => $qty,
+                'product_price'       => $product_price,
+                'total_product_price' => $total_product_price,
+                'store_id'            => $request->store_id[$i],
+                'created_at'          => now(),
+            ];
+
+            // ================= unit content =================
+            $unitcontent = Inv_ProductUnit::where('product_id', $productID)
+                ->where('unit_id', $request->unit_id[$i])
+                ->value('unitcontent') ?? 1;
+
+            $total_unitcontent = $unitcontent * $qty;
+
+            // ================= stock =================
+            $stockData[] = [
+                'invimport_export_id' => $invImportOrder->id,
+                'supplier_id'         => $invImportOrder->supplier_id,
+                'product_id'          => $request->product_id[$i],
+                'unit_id'             => $request->unit_id[$i],
+                'quantity_in'         => $total_unitcontent,
+                'store_id'            => $request->store_id[$i],
+                'created_at'          => now(),
+                'flag'                => 1,
+            ];
+        }
+
+        // insert details
+        Inv_importorder_details::insert($detailsData);
+
+        // ================= supplier details =================
+        Supplier_details::create([
+            'invimport_id'         => $invImportOrder->id,
+            'cash_balance_credit' => $totalInvoice,
+            'supplier_id'         => $invImportOrder->supplier_id,
+        ]);
+
+        // ================= stock =================
+        Inv_controlStock::insert($stockData);
+
+        DB::commit();
+
+    } catch (\Throwable $th) {
+        DB::rollBack();
+        throw $th;
+    }
+
+    return redirect(route('invImportOrders.index'))->with('success', trans('تنبيه...تم حفظ اذن توريد بضاعه بنجاح'));
+}
 
     public function insert_into_stores(Request $request){
         // return $request;

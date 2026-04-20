@@ -164,7 +164,14 @@
                         @foreach($result as $item)
                      
                                 <tr> 	
-                                    <td>{{$item->get_store->name}}</td>
+                                    <td>
+                                        {{-- {{$item->get_store->name}} --}}
+                                        @if(isset($item->stores))
+                                        @foreach($item->stores as $store)
+                                         <span class="badge badge-secondary" style="font-size: 14px ; width: 80px;">{{  $store }}</span>
+                                         @endforeach
+                                      @endif
+                                    </td>
                                     <td>
                                     @if(isset($item->suppliers))
                                       @foreach($item->suppliers as $supplier)

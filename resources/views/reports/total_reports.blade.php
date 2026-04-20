@@ -65,11 +65,11 @@
                     <option value="all" selected>الكل</option>
     
                      @foreach($colors as $color)
-                     @if (!count($color->product_color_product))
+                     {{-- @if (!count($color->product_color_product))
                      @continue;
-                     @else
-                    <option value="{{$color->id}}">{{$color->invcolor_category->name}} - {{$color->get_color_code->name}}</option>
-                    @endif 
+                     @else --}}
+                    <option value="{{$color->id}}">{{$color->invcolor_category->name}}</option>
+                    {{-- @endif  --}}
                     @endforeach
                     </select>
 
@@ -84,10 +84,6 @@
                     @endforeach
                 </select>
             </div>
-
-
-
-
 
             <div class="form-group col-sm-4">
                 {!! Form::label('product_id', 'الصنف:') !!}
