@@ -12,6 +12,7 @@ use App\Http\Controllers\AppBaseController;
 use Response;
 use App\Models\CRM\Customer;
 use App\Models\CRM\suppliers;
+use App\Models\CRM\Stage;
 use App\Models\inventory\Inv_product;
 use App\Models\inventory\Inv_store;
 use App\Models\inventory\InvUnit;
@@ -64,11 +65,14 @@ class Inv_exportOrderController extends AppBaseController
     public function create()
     {
         $colors=Color::with('invcolor_category:name,id','get_color_code:name,id')->get();
-        $customers = Customer::pluck('name','id');
+        $customers = Customer::select('id','name')->get();
+        $stages = Stage::select('id','name')->get();
+        // return $customers;
         $work_orders= WorkOrder::select('id')->where('status','open')->get();
         return view('inv_export_orders.create')
         ->with([
             'customers'=>$customers,
+            'stages'=>$stages,
             'work_orders'=>$work_orders,
             'colors'=>$colors,
             
@@ -139,8 +143,7 @@ class Inv_exportOrderController extends AppBaseController
 
     public function show($id)
     {
-        $invExportOrder = Inv_exportOrder::with(['get_user:name,id'])
-        ->select('id','date_out','comment','work_order_id','manual_id')->find($id);
+        $invExportOrder = Inv_exportOrder::with(['get_user:name,id'])->find($id);
 
         if (empty($invExportOrder)) {
             return redirect(route('invExportOrders.index'))->with('error', trans('عفوآ...لم يتم العثور على اذن صرف البضاعه'));
@@ -192,8 +195,7 @@ class Inv_exportOrderController extends AppBaseController
      */
     public function edit($id)
     {
-        $invExportOrder = Inv_exportOrder::with(['get_user:name,id'])
-        ->select('id','date_out','comment','work_order_id','manual_id')->find($id);
+        $invExportOrder = Inv_exportOrder::with(['get_user:name,id'])->find($id);
        
         if (empty($invExportOrder)) {
             return redirect(route('invExportOrders.index'))->with('error', trans('عفوآ...لم يتم العثور على اذن صرف البضاعه'));
@@ -256,8 +258,9 @@ class Inv_exportOrderController extends AppBaseController
             ])->whereIn('product_id',$Inv_product)->select('id','product_id','color_id')->get();
 
         $work_orders = WorkOrder::select('id')->get();
-        // return $table_body;
-        // return $invExportOrder;
+        $customers = Customer::select('id','name')->get();
+        $stages = Stage::select('id','name')->get();
+
         return view('inv_export_orders.edit')
         ->with([
             'invExportOrder'=> $invExportOrder,
@@ -265,6 +268,8 @@ class Inv_exportOrderController extends AppBaseController
             'sum_qty'=>$sum_qty,
             'work_orders'=>$work_orders,
             'products'=>$products,
+            'customers'=>$customers,
+            'stages'=>$stages,
         ]);
     }
 

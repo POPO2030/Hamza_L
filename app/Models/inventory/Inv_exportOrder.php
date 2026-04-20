@@ -6,6 +6,8 @@ use Eloquent as Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use App\Models\CRM\Model_name;
+use App\Models\CRM\Customer;
+use App\Models\CRM\Stage;
 use App\Models\sales\Final_product_requset;
 
 /**
@@ -27,14 +29,17 @@ class Inv_exportOrder extends Model
 
     public $table = 'inv_export_orders';
     
-
     protected $dates = ['deleted_at'];
-
-
 
     public $fillable = [
         'manual_id',
         'work_order_id',
+        'customer_id',
+        'washing_type', // نوع الغسلة
+        'style_code', //  كود القصة
+        'washing_weight', // وزن الغسلة
+        'wash_color', // لون الغسلة
+        'stage_id', // مرحلة الانتاج
         'date_out',
         'comment',
         'user_id',
@@ -79,6 +84,14 @@ class Inv_exportOrder extends Model
     public function get_model()
     {
         return $this->belongsTo(Model_name::class,'model_id');
+    }
+    public function get_customer()
+    {
+        return $this->belongsTo(Customer::class,'customer_id');
+    }
+    public function get_stage()
+    {
+        return $this->belongsTo(Stage::class,'stage_id');
     }
 
     public function invproduct_category()
