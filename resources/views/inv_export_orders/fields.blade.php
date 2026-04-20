@@ -8,7 +8,7 @@
     
     <!-- Date In Field -->
     @if(!isset($table_body))
-    <div class="form-group col-sm-6">
+    <div class="form-group col-sm-3">
         {!! Form::label('date_out', 'تاريخ الصرف: <span style="color: red">*</span>', [], false) !!}
         <input type="text" value='{{ now()->format("Y/m/d H:i:s") }}' class='form-control' name='date_out' id='date_out' readonly>
         @if ($errors->has('date_out'))
@@ -22,7 +22,7 @@
     
     @else
     
-    <div class="form-group col-sm-6">
+    <div class="form-group col-sm-3">
         {!! Form::label('date_out', 'تاريخ الصرف: <span style="color: red">*</span>', [], false) !!}
         {{-- {!! Form::date('date_out', date('Y-m-d', strtotime($invExportOrder->date_out)), ['class' => 'form-control text-center' . ($errors->has('date_out') ? ' is-invalid' : ''),'id'=>'date_out','onkeyup' => 'replaceChars(this)', 'oninput' => 'removeError(this), replaceChars(this)']) !!} --}}
         <input type="text" value='{{ now()->format("Y/m/d H:i:s") }}' class='form-control' name='date_out' id='date_out' readonly>
@@ -36,22 +36,20 @@
     </div>
     @endif
     
+        <!-- Washing type Field -->
     @if(isset($table_body))
-    <!-- manual_id Field -->
-    <div class="form-group col-sm-6">
-        {!! Form::label('manual_id', 'رقم المستند:') !!}
-        {!! Form::text('manual_id', $invExportOrder->manual_id, ['class' => 'form-control text-center']) !!}
+    <div class="form-group col-sm-3">
+        {!! Form::label('washing_type', 'نوع الغسلة:') !!}
+        {!! Form::text('washing_type', $invExportOrder->washing_type, ['class' => 'form-control text-center']) !!}
     </div>
     @else
-    <!-- manual_id Field -->
-    <div class="form-group col-sm-6">
-        {!! Form::label('manual_id', 'رقم المستند:') !!}
-        {!! Form::text('manual_id', null, ['class' => 'form-control text-center']) !!}
+    <div class="form-group col-sm-3">
+        {!! Form::label('washing_type', 'نوع الغسلة:') !!}
+        {!! Form::text('washing_type', null, ['class' => 'form-control text-center']) !!}
     </div>
     @endif
-    
-    <!-- Customer Id Field -->
-    <div class="form-group col-sm-6">
+    <!-- work_order_id Field -->
+    <div class="form-group col-sm-3">
         {!! Form::label('work_order_id', ' يصرف الى:') !!}
         <div id="work_order_id-container">
             @if(isset($invExportOrder)) 
@@ -81,9 +79,114 @@
         <span id="work_order_id-error" class="error-message" style="color: red"></span>
     </div>
 
+        <!-- Customer Id Field -->
+        <div class="form-group col-sm-3">
+            {!! Form::label('customer_id', ' العميل:') !!}
+            <div id="customer_id-container">
+                @if(isset($invExportOrder)) 
+                    <select name="customer_id" class="form-control customer_id searchable" id="customer_id">
+                        <option value="" disabled>اختر</option>
+        
+                        @foreach($customers as $customer)
+                            <option value="{{ $customer->id }}"{{ $customer->id == $invExportOrder->customer_id ? 'selected' : '' }}>
+                                {{ $customer->name }}
+                            </option>
+                        @endforeach
+                    </select>
+                @else
+                    <select name="customer_id" class="form-control customer_id searchable" id="customer_id">
+                        <option value="" selected disabled>اختر</option>
+                        @foreach($customers as $customer)
+                        <option value="{{$customer->id}}">{{$customer->name}}</option>
+                        @endforeach
+                    </select>
+                @endif
+            
+        </div>
+            <span id="customer_id-error" class="error-message" style="color: red"></span>
+        </div>
+
+    <!-- style_code Field -->
+    @if(isset($table_body))
+    <div class="form-group col-sm-3">
+        {!! Form::label('style_code', 'كود القصة:') !!}
+        {!! Form::text('style_code', $invExportOrder->style_code, ['class' => 'form-control text-center']) !!}
+    </div>
+    @else
+    <div class="form-group col-sm-3">
+        {!! Form::label('style_code', 'كود القصة:') !!}
+        {!! Form::text('style_code', null, ['class' => 'form-control text-center']) !!}
+    </div>
+    @endif
+
+        <!-- washing_weight Field -->
+        @if(isset($table_body))
+        <div class="form-group col-sm-3">
+            {!! Form::label('washing_weight', 'وزن الغسلة:') !!}
+            {!! Form::text('washing_weight', $invExportOrder->washing_weight, ['class' => 'form-control text-center']) !!}
+        </div>
+        @else
+        <div class="form-group col-sm-3">
+            {!! Form::label('washing_weight', 'وزن الغسلة:') !!}
+            {!! Form::text('washing_weight', null, ['class' => 'form-control text-center']) !!}
+        </div>
+        @endif
+        <!-- wash_color Field -->
+        @if(isset($table_body))
+        <div class="form-group col-sm-3">
+            {!! Form::label('wash_color', 'لون الغسلة:') !!}
+            {!! Form::text('wash_color', $invExportOrder->wash_color, ['class' => 'form-control text-center']) !!}
+        </div>
+        @else
+        <div class="form-group col-sm-3">
+            {!! Form::label('wash_color', 'لون الغسلة:') !!}
+            {!! Form::text('wash_color', null, ['class' => 'form-control text-center']) !!}
+        </div>
+        @endif
+
+         <!-- stage_id Field -->
+         <div class="form-group col-sm-3">
+            {!! Form::label('stage_id', ' مرحلة الانتاج:') !!}
+            <div id="stage_id-container">
+                @if(isset($invExportOrder)) 
+                    <select name="stage_id" class="form-control stage_id searchable" id="stage_id">
+                        <option value="" disabled>اختر</option>
+        
+                        @foreach($stages as $stage)
+                            <option value="{{ $stage->id }}"{{ $stage->id == $invExportOrder->stage_id ? 'selected' : '' }}>
+                                {{ $stage->name }}
+                            </option>
+                        @endforeach
+                    </select>
+                @else
+                    <select name="stage_id" class="form-control stage_id searchable" id="stage_id">
+                        <option value="" selected disabled>اختر</option>
+                        @foreach($stages as $stage)
+                        <option value="{{$stage->id}}">{{$stage->name}}</option>
+                        @endforeach
+                    </select>
+                @endif
+            
+        </div>
+            <span id="customer_id-error" class="error-message" style="color: red"></span>
+        </div>
+
+    <!-- manual_id Field -->
+    @if(isset($table_body))
+    <div class="form-group col-sm-3">
+        {!! Form::label('manual_id', 'رقم المستند:') !!}
+        {!! Form::text('manual_id', $invExportOrder->manual_id, ['class' => 'form-control text-center']) !!}
+    </div>
+    @else
+    <!-- manual_id Field -->
+    <div class="form-group col-sm-3">
+        {!! Form::label('manual_id', 'رقم المستند:') !!}
+        {!! Form::text('manual_id', null, ['class' => 'form-control text-center']) !!}
+    </div>
+    @endif
     
         <!-- Comment Field -->
-        <div class="form-group col-sm-6">
+        <div class="form-group col-sm-9">
             {!! Form::label('comment', 'الملاحظات:') !!}
             {!! Form::text('comment', null, ['class' => 'form-control text-center']) !!}
         </div>

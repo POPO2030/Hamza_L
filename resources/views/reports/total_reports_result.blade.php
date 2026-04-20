@@ -146,9 +146,7 @@
                     <th>المورد</th>
                     <th>الكود</th>
                     <th>الصنف</th>
-
                     <th>الوحده</th>
-
                     <th>الرصيد الحالي</th>
                     <th>صوره الصنف</th>
                       
@@ -168,8 +166,10 @@
                                 <tr> 	
                                     <td>{{$item->get_store->name}}</td>
                                     <td>
-                                    @if(isset($item->get_supplier))
-                                        {{$item->get_supplier->name}}
+                                    @if(isset($item->suppliers))
+                                      @foreach($item->suppliers as $supplier)
+                                       <span class="badge badge-primary" style="font-size: 14px ; width: 80px;">{{  $supplier }}</span>
+                                       @endforeach
                                     @endif
                                     </td>
                                     <td>

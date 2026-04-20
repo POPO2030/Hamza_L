@@ -75,9 +75,6 @@
 
             </div>
 
-
-
-
             <div class="form-group col-sm-4">
                 {!! Form::label('category_id', 'مجموعه المنتج:') !!}
                 <select name="category_id" class="form-control searchable">
