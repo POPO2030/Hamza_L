@@ -725,7 +725,7 @@
                 <li class="nav-item " >
                   <a class="nav-link " data-toggle="collapse" href="#pagesExamples7" aria-expanded="true">
                     <i class="material-icons">report</i>
-                    <p> تقارير مخازن و حسابات
+                    <p style="font-size: 15px"> تقارير مخازن و حسابات
                       <b class="caret"></b>
                     </p>
                   </a>

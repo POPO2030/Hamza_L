@@ -136,7 +136,7 @@
                 </div>
                 <div>
                     <div> 
-                            <img src="{{ asset('images/store_total.jpg') }}" />
+                            <img src="{{ asset('images/product_report.jpg') }}" />
                     </div>
                 </div>
                 

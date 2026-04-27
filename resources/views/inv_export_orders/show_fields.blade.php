@@ -2,64 +2,64 @@
     اذن صرف بضاعه
     </div>
     <!-- Serial Field -->
-    <div class="col-sm-4">
-        {!! Form::label('serial', 'م:') !!}
+    <div class="col-sm-3">
+        {!! Form::label('serial', 'مسلسل:') !!}
         <span class="border border-lightgray  rounded text-white p-2 d-block text-center" style="width: 100%;background-color: #e0e4e7 !important; color: #504f4f !important;">{{ $invExportOrder->id }}</span>
     </div>
     <!-- Date In Field -->
-    <div class="col-sm-4">
+    <div class="col-sm-3">
         {!! Form::label('date_out', 'تاريخ الصرف:') !!}
         <span class="border border-lightgray  rounded text-white p-2 d-block text-center" style="width: 100%;background-color: #e0e4e7 !important; color: #504f4f !important;">{{ date('Y-m-d', strtotime($invExportOrder->date_out)) }}</span>
     </div>
 
     <!-- Category_Id Field -->
-    <div class="col-sm-4">
-        {!! Form::label('work_order_id', 'يصرف الى:') !!}
+    <div class="col-sm-3">
+            {!! Form::label('work_order_id', 'يصرف الى غسله رقم :') !!}
         <span class="border border-lightgray  rounded text-white p-2 d-block text-center" style="width: 100%;background-color: #e0e4e7 !important; color: #504f4f !important;">{{ $invExportOrder->work_order_id }}</span>
     </div>
 
     <!-- Serial Field -->
     @if(!empty($invExportOrder->customer_id))
-    <div class="col-sm-2">
+    <div class="col-sm-3">
         {!! Form::label('manual_id',  'العميل:') !!}
         <span class="border border-lightgray  rounded text-white p-2 d-block text-center" style="width: 100%;background-color: #e0e4e7 !important; color: #504f4f !important;">{{ $invExportOrder->get_customer->name }}</span>
     </div>
     @endif
     <!-- Serial Field -->
     @if(!empty($invExportOrder->washing_type))
-    <div class="col-sm-2">
+    <div class="col-sm-3">
         {!! Form::label('washing_type',  'نوع الغسلة:') !!}
         <span class="border border-lightgray  rounded text-white p-2 d-block text-center" style="width: 100%;background-color: #e0e4e7 !important; color: #504f4f !important;">{{ $invExportOrder->washing_type }}</span>
     </div>
     @endif
     <!-- Serial Field -->
     @if(!empty($invExportOrder->style_code))
-    <div class="col-sm-2">
+    <div class="col-sm-3">
         {!! Form::label('style_code',  'كود القصة:') !!}
         <span class="border border-lightgray  rounded text-white p-2 d-block text-center" style="width: 100%;background-color: #e0e4e7 !important; color: #504f4f !important;">{{ $invExportOrder->style_code }}</span>
     </div>
     @endif
     @if(!empty($invExportOrder->washing_weight))
-    <div class="col-sm-2">
+    <div class="col-sm-3">
         {!! Form::label('washing_weight',  'وزن الغسلة:') !!}
         <span class="border border-lightgray  rounded text-white p-2 d-block text-center" style="width: 100%;background-color: #e0e4e7 !important; color: #504f4f !important;">{{ $invExportOrder->washing_weight }}</span>
     </div>
     @endif
     @if(!empty($invExportOrder->wash_color))
-    <div class="col-sm-2">
+    <div class="col-sm-3">
         {!! Form::label('wash_color',  'لون الغسلة:') !!}
         <span class="border border-lightgray  rounded text-white p-2 d-block text-center" style="width: 100%;background-color: #e0e4e7 !important; color: #504f4f !important;">{{ $invExportOrder->wash_color }}</span>
     </div>
     @endif
     @if(!empty($invExportOrder->stage_id))
-    <div class="col-sm-2">
+    <div class="col-sm-3">
         {!! Form::label('stage_id',  'مرحلة الانتاج:') !!}
         <span class="border border-lightgray  rounded text-white p-2 d-block text-center" style="width: 100%;background-color: #e0e4e7 !important; color: #504f4f !important;">{{ $invExportOrder->get_stage->name }}</span>
     </div>
     @endif
     <!-- Serial Field -->
     @if(!empty($invExportOrder->manual_id))
-    <div class="col-sm-4">
+    <div class="col-sm-3">
         {!! Form::label('manual_id',  'رقم المستند:') !!}
         <span class="border border-lightgray  rounded text-white p-2 d-block text-center" style="width: 100%;background-color: #e0e4e7 !important; color: #504f4f !important;">{{ $invExportOrder->manual_id }}</span>
     </div>
@@ -67,21 +67,21 @@
 
 
 <!-- User Id Field -->
-<div class="col-sm-4">
+<div class="col-sm-3">
     {!! Form::label('user_id', 'مضاف بواسطة:') !!}
     <span class="border border-lightgray  rounded text-white p-2 d-block text-center" style="width: 100%;background-color: #e0e4e7 !important; color: #504f4f !important;">{{ $invExportOrder->get_user->name }}</span>
 </div>
 
 <!-- Created At Field -->
 @if(!empty($invExportOrder->created_at))
-<div class="col-sm-4">
+<div class="col-sm-3">
     {!! Form::label('created_at', 'تاريخ الانشاء:') !!}
     <span class="border border-lightgray  rounded text-white p-2 d-block text-center" style="width: 100%;background-color: #e0e4e7 !important; color: #504f4f !important;">{{ $invExportOrder->created_at }}</span>
 </div>
 @endif
 <!-- Updated By Field -->
 @if(!empty($invExportOrder->get_user_update->name))
-<div class="col-sm-6">
+<div class="col-sm-3">
     {!! Form::label('updated_by', 'القائم بالتعديل:') !!}
     <span class="border border-lightgray  rounded text-white p-2 d-block text-center" style="width: 100%;background-color: #e0e4e7 !important; color: #504f4f !important;">{{ $invExportOrder->get_user_update->name }}</span>
    </div>
