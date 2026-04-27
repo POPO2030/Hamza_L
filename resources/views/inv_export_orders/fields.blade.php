@@ -50,7 +50,7 @@
     @endif
     <!-- work_order_id Field -->
     <div class="form-group col-sm-3">
-        {!! Form::label('work_order_id', ' يصرف الى:') !!}
+            {!! Form::label('work_order_id', 'يصرف الى غسله رقم :') !!}
         <div id="work_order_id-container">
             @if(isset($invExportOrder)) 
             @if ($invExportOrder->work_order_id === 'lab')

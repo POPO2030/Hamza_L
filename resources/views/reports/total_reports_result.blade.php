@@ -168,14 +168,14 @@
                                         {{-- {{$item->get_store->name}} --}}
                                         @if(isset($item->stores))
                                         @foreach($item->stores as $store)
-                                         <span class="badge badge-secondary" style="font-size: 14px ; width: 80px;">{{  $store }}</span>
+                                         <span class="badge badge-secondary" style="font-size: 10px ; width: 80px;">{{  $store }}</span>
                                          @endforeach
                                       @endif
                                     </td>
                                     <td>
                                     @if(isset($item->suppliers))
                                       @foreach($item->suppliers as $supplier)
-                                       <span class="badge badge-primary" style="font-size: 14px ; width: 80px;">{{  $supplier }}</span>
+                                       <span class="badge badge-primary" style="font-size: 10px ; width: 80px;">{{  $supplier }}</span>
                                        @endforeach
                                     @endif
                                     </td>
@@ -213,8 +213,8 @@
                                             @endforeach
                                             <div id="clone-container" class="clone-image"></div>
                                     </td>
+                                    
                                     <td class="hide_column">
-                                     
                                         <form method="post" action="{{ route('product_report_result') }}" style="text-align: center;">
                                             @csrf
                                             <input type="hidden" name="product_id" value="{{ $item->product_id }}">
@@ -224,12 +224,10 @@
                                             <input type="hidden" name="supplier_id" value="{{ $request->supplier_id  }}">    
                                             <input type="hidden" name="color_id" value="{{ $request->color_id  }}">    
                                             <input type="hidden" name="category_id" value="{{ $request->category_id  }}">    
-                                            
                                             <button type="submit" style="background: none; border: none; text-align: center;">
                                                 <i class="fa fa-eye"></i> 
                                             </button>
                                         </form>
-                                        
                                     </td>
                                     
                                 </tr>
