@@ -143,7 +143,18 @@ class Inv_exportOrderController extends AppBaseController
 
     public function show($id)
     {
-        $invExportOrder = Inv_exportOrder::with(['get_user:name,id'])->find($id);
+        $invExportOrder = Inv_exportOrder::with(['get_user:name,id','get_work_order','get_work_order_stage:work_order_id,service_item_satge_id',
+        'get_work_order_stage.get_sevice_item_stage:id,satge_id,service_item_id',
+        'get_work_order_stage.get_sevice_item_stage.get_service_item',
+
+        'get_work_order_stage.get_sevice_item_stage.get_stage:id,name'])->find($id);
+
+        $workOrderId = $invExportOrder->work_order_id ?? null;
+        $receiveReceiptId = $invExportOrder->get_work_order->receive_receipt_id ?? null;
+    
+        // Get position: 1-based index of this work_order among all with same receive_receipt_id
+        $orderPosition = WorkOrder::where('receive_receipt_id', $receiveReceiptId)->orderBy('id', 'asc')->pluck('id')->search($workOrderId) + 1;
+        $receiveReceiptCount = WorkOrder::where('receive_receipt_id', $receiveReceiptId)->count();
 
         if (empty($invExportOrder)) {
             return redirect(route('invExportOrders.index'))->with('error', trans('عفوآ...لم يتم العثور على اذن صرف البضاعه'));
@@ -195,8 +206,20 @@ class Inv_exportOrderController extends AppBaseController
      */
     public function edit($id)
     {
-        $invExportOrder = Inv_exportOrder::with(['get_user:name,id'])->find($id);
-       
+        $invExportOrder = Inv_exportOrder::with(['get_user:name,id','get_work_order','get_work_order_stage:work_order_id,service_item_satge_id',
+        'get_work_order_stage.get_sevice_item_stage:id,satge_id,service_item_id',
+        'get_work_order_stage.get_sevice_item_stage.get_service_item',
+
+        'get_work_order_stage.get_sevice_item_stage.get_stage:id,name'])->find($id);
+
+        $workOrderId = $invExportOrder->work_order_id ?? null;
+        $receiveReceiptId = $invExportOrder->get_work_order->receive_receipt_id ?? null;
+    
+        // Get position: 1-based index of this work_order among all with same receive_receipt_id
+        $orderPosition = WorkOrder::where('receive_receipt_id', $receiveReceiptId)->orderBy('id', 'asc')->pluck('id')->search($workOrderId) + 1;
+        $receiveReceiptCount = WorkOrder::where('receive_receipt_id', $receiveReceiptId)->count();
+
+
         if (empty($invExportOrder)) {
             return redirect(route('invExportOrders.index'))->with('error', trans('عفوآ...لم يتم العثور على اذن صرف البضاعه'));
         }
@@ -264,6 +287,8 @@ class Inv_exportOrderController extends AppBaseController
         return view('inv_export_orders.edit')
         ->with([
             'invExportOrder'=> $invExportOrder,
+            'order_position'=>$orderPosition,
+            'receive_receipt_count'=>$receiveReceiptCount,
             'table_body'=>$table_body,
             'sum_qty'=>$sum_qty,
             'work_orders'=>$work_orders,
@@ -468,6 +493,29 @@ class Inv_exportOrderController extends AppBaseController
         
         return $final_product_request_detail;
     }
+
+    public function get_work_order_data(Request $request) {
+       $work_order_data= WorkOrder::with(['get_customer:id,name','get_work_order_stage:satge_id,service_item_id',
+       'get_work_order_stage.get_stage:id,name','get_work_order_stage.get_service_item:id,name'])->where('id', $request->work_order_id)->first();
+
+       if ($work_order_data) {
+
+            // Get all work orders with same receive_receipt_id ordered by id
+            $workOrders = WorkOrder::where(
+                'receive_receipt_id',
+                $work_order_data->receive_receipt_id
+            )->orderBy('id')->pluck('id')->values();
+
+            // Total rows count
+            $work_order_data->receive_receipt_count = $workOrders->count();
+
+            // Current row index (1-based)
+            $work_order_data->order_position = $workOrders->search($request->work_order_id) + 1;
+        }
+       return $work_order_data;
+    }
+
+
 
 
     

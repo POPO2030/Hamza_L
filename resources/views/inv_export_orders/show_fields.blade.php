@@ -3,7 +3,7 @@
     </div>
     <!-- Serial Field -->
     <div class="col-sm-3">
-        {!! Form::label('serial', 'مسلسل:') !!}
+        {!! Form::label('serial', 'م:') !!}
         <span class="border border-lightgray  rounded text-white p-2 d-block text-center" style="width: 100%;background-color: #e0e4e7 !important; color: #504f4f !important;">{{ $invExportOrder->id }}</span>
     </div>
     <!-- Date In Field -->
@@ -27,32 +27,40 @@
     @endif
     <!-- Serial Field -->
     @if(!empty($invExportOrder->washing_type))
-    <div class="col-sm-3">
-        {!! Form::label('washing_type',  'نوع الغسلة:') !!}
+    <div class="col-sm-3 {{ (isset($invExportOrder) && in_array($invExportOrder->work_order_id, ['lab', 'spare_parts'])) ? 'd-none' : '' }}">
+        {!! Form::label('washing_type',  'اللون:') !!}
+        @php
+        $distinctItems = $invExportOrder->get_work_order_stage->pluck('get_sevice_item_stage.get_service_item.name')->filter()->unique()->values();
+        @endphp
+
+        @forelse($distinctItems as $index => $name)
         <span class="border border-lightgray  rounded text-white p-2 d-block text-center" style="width: 100%;background-color: #e0e4e7 !important; color: #504f4f !important;">{{ $invExportOrder->washing_type }}</span>
+            @empty
+            <span class="border border-lightgray  rounded text-white p-2 d-block text-center" style="width: 100%;background-color: #e0e4e7 !important; color: #504f4f !important;">-</span>
+        @endforelse
     </div>
     @endif
     <!-- Serial Field -->
     @if(!empty($invExportOrder->style_code))
-    <div class="col-sm-3">
-        {!! Form::label('style_code',  'كود القصة:') !!}
-        <span class="border border-lightgray  rounded text-white p-2 d-block text-center" style="width: 100%;background-color: #e0e4e7 !important; color: #504f4f !important;">{{ $invExportOrder->style_code }}</span>
+    <div class="col-sm-3 {{ (isset($table_body) && in_array($invExportOrder->work_order_id, ['lab', 'spare_parts'])) ? 'd-none' : '' }}">
+        {!! Form::label('product_count',  'عدد الغسلة:') !!}
+        <span class="border border-lightgray  rounded text-white p-2 d-block text-center" style="width: 100%;background-color: #e0e4e7 !important; color: #504f4f !important;">{{ $invExportOrder->get_work_order->product_count ??'' }}</span>
     </div>
     @endif
     @if(!empty($invExportOrder->washing_weight))
-    <div class="col-sm-3">
+    <div class="col-sm-3 {{ (isset($table_body) && in_array($invExportOrder->work_order_id, ['lab', 'spare_parts'])) ? 'd-none' : '' }}">
         {!! Form::label('washing_weight',  'وزن الغسلة:') !!}
-        <span class="border border-lightgray  rounded text-white p-2 d-block text-center" style="width: 100%;background-color: #e0e4e7 !important; color: #504f4f !important;">{{ $invExportOrder->washing_weight }}</span>
+        <span class="border border-lightgray  rounded text-white p-2 d-block text-center" style="width: 100%;background-color: #e0e4e7 !important; color: #504f4f !important;">{{ $invExportOrder->get_work_order->product_weight ??'' }}</span>
     </div>
     @endif
     @if(!empty($invExportOrder->wash_color))
-    <div class="col-sm-3">
-        {!! Form::label('wash_color',  'لون الغسلة:') !!}
-        <span class="border border-lightgray  rounded text-white p-2 d-block text-center" style="width: 100%;background-color: #e0e4e7 !important; color: #504f4f !important;">{{ $invExportOrder->wash_color }}</span>
+    <div class="col-sm-3 {{ (isset($table_body) && in_array($invExportOrder->work_order_id, ['lab', 'spare_parts'])) ? 'd-none' : '' }}">
+        {!! Form::label('wash_color',  'ترتيب الغسلة:') !!}
+        <span class="border border-lightgray  rounded text-white p-2 d-block text-center" style="width: 100%;background-color: #e0e4e7 !important; color: #504f4f !important;">{{ ($order_position ?? '') . ' من ' . ($receive_receipt_count ?? '') }}</span>
     </div>
     @endif
     @if(!empty($invExportOrder->stage_id))
-    <div class="col-sm-3">
+    <div class="col-sm-3 {{ (isset($invExportOrder) && in_array($invExportOrder->work_order_id, ['lab', 'spare_parts'])) ? 'd-none' : '' }}">
         {!! Form::label('stage_id',  'مرحلة الانتاج:') !!}
         <span class="border border-lightgray  rounded text-white p-2 d-block text-center" style="width: 100%;background-color: #e0e4e7 !important; color: #504f4f !important;">{{ $invExportOrder->get_stage->name }}</span>
     </div>

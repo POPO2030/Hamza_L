@@ -32,6 +32,16 @@ document.addEventListener("DOMContentLoaded", function() {
       document.getElementById('work_order_id-container').style.border = '';
       document.getElementById('work_order_id-container').style.borderColor = '';
     }
+    if (work_order_id != 'lab' ||work_order_id != 'spare_parts') {
+      document.getElementById('stage_id-error').innerHTML = 'عفوآ...يجب مرحلة الانتاج';
+      document.getElementById('stage_id-container').style.border = '1px solid';
+      document.getElementById('stage_id-container').style.borderColor = 'red';
+      isValid = false;
+    } else {
+      document.getElementById('stage_id-error').innerHTML = '';
+      document.getElementById('stage_id-container').style.border = '';
+      document.getElementById('stage_id-container').style.borderColor = '';
+    }
   
 
   if (empTable) {

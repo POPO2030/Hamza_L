@@ -35,10 +35,8 @@ class Inv_exportOrder extends Model
         'manual_id',
         'work_order_id',
         'customer_id',
-        'washing_type', // نوع الغسلة
-        'style_code', //  كود القصة
-        'washing_weight', // وزن الغسلة
-        'wash_color', // لون الغسلة
+        'product_count', //  كود القصة
+        'product_weight', // وزن الغسلة
         'stage_id', // مرحلة الانتاج
         'date_out',
         'comment',
@@ -102,4 +100,16 @@ class Inv_exportOrder extends Model
     {
         return $this->belongsTo(Final_product_requset::class,'final_product_request_id');
     }
+
+    public function get_work_order_stage()
+    {
+        return $this->hasMany('App\Models\CRM\Work_order_stage','work_order_id','work_order_id');
+    }
+
+    public function get_work_order()
+    {
+        return $this->belongsTo('App\Models\CRM\WorkOrder','work_order_id')
+        ->select('id','receive_receipt_id','product_count','product_weight');
+    }
+
 }

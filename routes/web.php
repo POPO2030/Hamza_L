@@ -553,6 +553,7 @@ Route::get('/find_supplier', 'inventory\Inv_exportOrderController@find_supplier'
 
 Route::get('/final_product_requset_ids', 'inventory\Inv_exportOrderController@final_product_requset_ids');
 Route::get('/final_product_requset', 'inventory\Inv_exportOrderController@final_product_requset');
+Route::get('/get_work_order_data', 'inventory\Inv_exportOrderController@get_work_order_data');
 // =========================================================================================
 
 // Route::resource('colorCategories', App\Http\Controllers\inventory\Color_categoryController::class);

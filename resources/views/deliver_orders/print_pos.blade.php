@@ -4,120 +4,135 @@
 
 <title> طباعة اذن التسليم</title>
 
-    <style>
-		  @page {
-            /* width: 80mm;
-            height: 90mm;
-            text-align: center;
-            align-content: center;
-            /* size: 79mm ; */
-            
-            size: A5 landscape !important;
-            margin: 0; 
+<style>
+    @page{
+        size:79mm auto;
+        margin:2mm;
+    }
+    
+    body{
+        direction:rtl;
+        font-family:Tahoma, Arial, sans-serif;
+        width:75mm;
+        margin:auto;
+        color:#000;
+        font-size:14px;
+        zoom: 90%!important;
+    }
+    
+    .btn{
+        background:#17a2b8;
+        color:#fff;
+        padding:6px 12px;
+        border-radius:6px;
+        text-decoration:none;
+        font-size:14px;
+        display:inline-block;
+        margin-bottom:8px;
+    }
+    
+    .btn:hover{
+        background:#055561;
+    }
+    
+    table{
+        width:100%;
+        border-collapse:collapse;
+        margin-bottom:6px;
+    }
+    
+    th,td{
+        padding:4px;
+        text-align:center;
+        vertical-align:middle;
+    }
+    
+    .main-table th,
+    .main-table td{
+        border:1px solid #000;
+    }
+    
+    .main-table th{
+        background:#f2f2f2;
+        font-weight:bold;
+        font-size:13px;
+    }
+    
+    .header-table td{
+        border:none;
+        font-weight:bold;
+        font-size:14px;
+    }
+    
+    .total-box td{
+        border:1px solid #000;
+        font-weight:bold;
+        font-size:15px;
+        background:#fafafa;
+    }
+    
+    .notes-box,
+    .footer-box{
+        margin-top:6px;
+        font-size:14px;
+        line-height:1.6;
+    }
+    
+    .title{
+        text-align:center;
+        font-size:18px;
+        font-weight:bold;
+        margin-bottom:5px;
+        border-bottom:1px dashed #000;
+        padding-bottom:4px;
+    }
+    
+    .separator{
+        border-top:1px dashed #000;
+        margin:5px 0;
+    }
+    
+    @media print{
+    
+        #print-deliverOrder{
+            display:none;
         }
-        /* body {
-        zoom: 0.73; 
-        } */
-		.btn {
-				transition-duration: 0.4s;
-				position: relative;
-				background-color: #17a2b8;
-				border: none;
-				border-radius: 8px;
-				font-size: 18px;
-				color: #FFFFFF;
-				padding: 20px;
-				width: 20px;
-				text-align: center;
-				transition-duration: 0.4s;
-				text-decoration: none;
-				overflow: hidden;
-				cursor: pointer;
-            }
-
-			.btn:hover {
-			background-color: #055561; 
-			color: white;
-			}
-
-        table {
-                /* width: 1050px; */
-                border-collapse: collapse;
-                margin:  auto;
-                /* font-size: 22px; */
-            }
-            td {
-                padding: 0.5rem;
-                text-align: center;
-                font-size: 18px;
-            }
-
-            #table1, th, td {
-                border: 1px solid black;
-                border-collapse: collapse;
-                font-size:18px;
-                font-weight:bolder;
-                }
-            .font-weight-bold {
-                font-weight: bold;
-            }
-            .fs-4 {
-                font-size: 1.5rem;
-            }
-            #customer-name {
-                margin-right: 1rem;
-            }
-            #date {
-                /* margin-right: 200px; */
-            }
-            .category-name span {
-                display: inline-block;
-                margin-right: 3px;
-                padding: 5px 10px;
-        border-radius: 5px;
-        border: 1px solid black;
-            }
-
-            @media print {
-        #print-deliverOrder {
-            display: none;
+    
+        body{
+            width:75mm;
+            margin:0 auto;
         }
-        }
-
-        </style>
+    }
+    </style>
         
 </head>
 <body>
-	<div class="col-sm-12">
-		<a class="btn btn" style="float: left; border: 1px; 
-		 width: 50px;text-align:center;margin:5px;border-radius: 8px;padding:5px"
-		   href="{{ route('final_deliver_orders') }}" id="print-deliverOrder">
-			رجوع
-		</a>
-		
-	</div>
+	<div class="col-sm-12 d-flex justify-content-end" style="text-align: end;">
+        <a class="btn btn-secondary" style="width: 50px; text-align:center; margin:5px; border-radius: 8px; padding:5px; border: 1px solid #ccc;"
+           href="{{ route('final_deliver_orders') }}" id="print-deliverOrder">
+            رجوع
+        </a>
+    </div>
  
-
-<table  style="border-collapse: collapse;">
+    <div class="title">اذن التسليم</div>
+{{-- <table  style="border-collapse: collapse;"> --}}
+    <table class="header-table">
     <tr  style="border: none;">
     <td colspan="7" style="border: none;"><span>{{ $deliverOrder[0]->created_at }}</span></td>
     </tr>
     <tr style="border: none;">
-        <td  colspan="7" style="border: none;text-align: center" > اذن تسليم رقم: <span>{{ $deliverOrder[0]->final_deliver_order_id }}</span></td>
-    </tr>
-    <tr style="border: none;">
-         <td colspan="7" style="border: none;"> العميل: <span >{{ $deliverOrder[0]->get_deliver_order->get_customer->name }}</span></td>
-
+        <td  style="border: none;"> </td>
+        <td colspan="3" style="border: none;">  <span >{{ $deliverOrder[0]->get_deliver_order->get_customer->name }}</span></td>
+        <td  colspan="3" style="border: none;">  <span>{{ $deliverOrder[0]->final_deliver_order_id }}</span></td>
     </tr>
     <tr >
        
-                    <td style="border: 1px solid black;">اذن اضافة</td>
-                    <td style="border: 1px solid black;"> الغسلة </td>
+                    {{-- <td style="border: 1px solid black;">اذن استلام</td> --}}
+                    <td style="border: 1px solid black;"> امر شغل </td>
                     <td style="border: 1px solid black;"> موديل </td>
-                    <td style="border: 1px solid black;"> المنتج</td>
+                    {{-- <td style="border: 1px solid black;"> المنتج</td> --}}
                     <td style="border: 1px solid black;"> عدد الاكياس</td>
                     <td style="border: 1px solid black;"> العدد</td>
-                    <td style="border: 1px solid black;"> الوزن</td>
                     <td style="border: 1px solid black;"> الاجمالى</td>
                
         
@@ -128,14 +143,13 @@
     @foreach($deliverOrder as $data)
    
         <tr>
-            <td style="border: 1px solid black;">{{ $data->get_deliver_order->receipt_id }} </td>
+            {{-- <td style="border: 1px solid black;">{{ $data->get_deliver_order->receipt_id }} </td> --}}
             <td style="border: 1px solid black;"> {{ $data->get_deliver_order->work_order_id }}  </td>
             <td style="border: 1px solid black;"> {{ $data->get_deliver_order->get_receive_receipt->model }}  </td>
-            <td style="border: 1px solid black;"> {{ $data->get_deliver_order->get_products->name }} {{ $data->get_deliver_order->product_type ? ' (' . $data->get_deliver_order->product_type . ')' : '' }}  </td>
+            {{-- <td style="border: 1px solid black;"> {{ $data->get_deliver_order->get_products->name }}   </td> --}}
            
             <td style="border: 1px solid black;">{{$data->package_number}}</td>
             <td style="border: 1px solid black;">{{$data->count}}</td>
-            <td style="border: 1px solid black;">{{$data->weight}}</td>
             <td style="border: 1px solid black;">{{$data->total}}</td>
             
         </tr>
@@ -143,13 +157,13 @@
         @php  $packagetotal+=$data->package_number @endphp
     @endforeach
 
-{{-- </table> --}}
+</table>
 
-{{-- <table  cellspacing="1" id="table1" style="border-collapse: collapse;"> --}}
+<table  cellspacing="1" id="table1" style="border-collapse: collapse;">
     <tr>
 		
-		<td colspan="3" style="border: 1px solid black;background-color: #b3b1b1" ><span lang="ar-eg">عدد الاكياس: {{$packagetotal}}</span></td>
-        <td colspan="5" style="border: 1px solid black;background-color: #b3b1b1"><span lang="ar-eg"> الاجمالى: {{$grandtotal}} </span></td>
+		<td style="border: 1px solid black;"><span lang="ar-eg">عدد الاكياس: {{$packagetotal}}</span></td>
+        <td style="border: 1px solid black;"><span lang="ar-eg"> الاجمالى: {{$grandtotal}} </span></td>
     
     </tr>
 
@@ -173,10 +187,9 @@
                         <p>{!! Form::label('receive_id', 'جهة التسليم:') !!} {{ $deliverOrder[0]->get_deliver_order->get_receivable->name }}</p>
                         @endif
                     </td>
-    </tr>
-                   
-    <tr style="border: none;">  
-        <td style="border: none;">   <p>{!! Form::label('Signature', 'التوقيع:') !!} .................................</p></td>
+                    {{-- <td style="border: none;">   <p>{!! Form::label('Signature', 'التوقيع:') !!} .................................</p></td> --}}
+               
+        
     </tr>
 </table>
 

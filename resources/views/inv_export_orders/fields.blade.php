@@ -5,171 +5,160 @@
       margin: 0;
     }
     </style>
-    
-    <!-- Date In Field -->
-    @if(!isset($table_body))
-    <div class="form-group col-sm-3">
-        {!! Form::label('date_out', 'تاريخ الصرف: <span style="color: red">*</span>', [], false) !!}
-        <input type="text" value='{{ now()->format("Y/m/d H:i:s") }}' class='form-control' name='date_out' id='date_out' readonly>
-        @if ($errors->has('date_out'))
-        <span class="invalid-feedback" role="alert">
-            <strong>{{ $errors->first('date_out') }}</strong>
-         
-        </span>
-    @endif
-        <span id="date_out-error" class="error-message" style="color: red"></span>
-    </div>
-    
-    @else
-    
-    <div class="form-group col-sm-3">
-        {!! Form::label('date_out', 'تاريخ الصرف: <span style="color: red">*</span>', [], false) !!}
-        {{-- {!! Form::date('date_out', date('Y-m-d', strtotime($invExportOrder->date_out)), ['class' => 'form-control text-center' . ($errors->has('date_out') ? ' is-invalid' : ''),'id'=>'date_out','onkeyup' => 'replaceChars(this)', 'oninput' => 'removeError(this), replaceChars(this)']) !!} --}}
-        <input type="text" value='{{ now()->format("Y/m/d H:i:s") }}' class='form-control' name='date_out' id='date_out' readonly>
-        @if ($errors->has('date_out'))
-        <span class="invalid-feedback" role="alert">
-            <strong>{{ $errors->first('date_out') }}</strong>
-         
-        </span>
-    @endif
-        <span id="date_out-error" class="error-message" style="color: red"></span>
-    </div>
-    @endif
-    
-        <!-- Washing type Field -->
-    @if(isset($table_body))
-    <div class="form-group col-sm-3">
-        {!! Form::label('washing_type', 'نوع الغسلة:') !!}
-        {!! Form::text('washing_type', $invExportOrder->washing_type, ['class' => 'form-control text-center']) !!}
-    </div>
-    @else
-    <div class="form-group col-sm-3">
-        {!! Form::label('washing_type', 'نوع الغسلة:') !!}
-        {!! Form::text('washing_type', null, ['class' => 'form-control text-center']) !!}
-    </div>
-    @endif
-    <!-- work_order_id Field -->
-    <div class="form-group col-sm-3">
+
+        <!-- work_order_id Field -->
+        <div class="form-group col-sm-3">
             {!! Form::label('work_order_id', 'يصرف الى غسله رقم :') !!}
-        <div id="work_order_id-container">
-            @if(isset($invExportOrder)) 
-            @if ($invExportOrder->work_order_id === 'lab')
-            <input type="text" class="form-control work_order_id text-center"id="spend_name" value="المعمل" readonly>
-            <input type="hidden" class="form-control work_order_id text-center" name="work_order_id" id="work_order_id" value="lab" readonly>
-            @elseif ($invExportOrder->work_order_id === 'spare_parts')
-            <input type="text" class="form-control work_order_id text-center"id="spend_name" value="قطع غيار" readonly>
-            <input type="hidden" class="form-control work_order_id text-center" name="work_order_id" id="work_order_id" value="spare_parts" readonly>
-            @else
-            <input type="text" class="form-control work_order_id text-center" name="work_order_id" id="work_order_id" value="{{$invExportOrder->work_order_id}}" readonly>
-            @endif
-
-            @else
-            {{-- {{ Form::select('product_category_id',$cats,null,['placeholder' => 'اختر  نوع الصرف','class'=> 'form-control searchable ','id'=>'product_category_id' ,'data-placeholder'=>"اختر  نوع الصرف", 'style'=>"width: 100%"],['option'=>'cats']) }} --}}
-            <select name="work_order_id" class="form-control work_order_id searchable" id="work_order_id">
-                <option value="" selected disabled>اختر</option>
-                <option value="lab">المعمل</option>
-                <option value="spare_parts">قطع غيار</option>
-                @foreach($work_orders as $work_order)
-                <option value="{{$work_order->id}}">{{$work_order->id}}</option>
-                @endforeach
-            </select>
-            @endif
-        
-    </div>
-        <span id="work_order_id-error" class="error-message" style="color: red"></span>
-    </div>
-
-        <!-- Customer Id Field -->
-        <div class="form-group col-sm-3">
-            {!! Form::label('customer_id', ' العميل:') !!}
-            <div id="customer_id-container">
+            <div id="work_order_id-container">
                 @if(isset($invExportOrder)) 
-                    <select name="customer_id" class="form-control customer_id searchable" id="customer_id">
-                        <option value="" disabled>اختر</option>
-        
-                        @foreach($customers as $customer)
-                            <option value="{{ $customer->id }}"{{ $customer->id == $invExportOrder->customer_id ? 'selected' : '' }}>
-                                {{ $customer->name }}
-                            </option>
-                        @endforeach
-                    </select>
+                    @if ($invExportOrder->work_order_id === 'lab')
+                     <input type="text" class="form-control work_order_id text-center"id="spend_name" value="المعمل" readonly>
+                     <input type="hidden" class="form-control work_order_id text-center" name="work_order_id" id="work_order_id" value="lab" readonly>
+                    @elseif ($invExportOrder->work_order_id === 'spare_parts')
+                     <input type="text" class="form-control work_order_id text-center"id="spend_name" value="قطع غيار" readonly>
+                     <input type="hidden" class="form-control work_order_id text-center" name="work_order_id" id="work_order_id" value="spare_parts" readonly>
+                    @else
+                     <input type="text" class="form-control work_order_id text-center" name="work_order_id" id="work_order_id" value="{{$invExportOrder->work_order_id}}" readonly>
+                    @endif
                 @else
-                    <select name="customer_id" class="form-control customer_id searchable" id="customer_id">
+                    <select name="work_order_id" class="form-control work_order_id searchable" id="work_order_id">
                         <option value="" selected disabled>اختر</option>
-                        @foreach($customers as $customer)
-                        <option value="{{$customer->id}}">{{$customer->name}}</option>
+                        <option value="lab">المعمل</option>
+                        <option value="spare_parts">قطع غيار</option>
+                        @foreach($work_orders as $work_order)
+                        <option value="{{$work_order->id}}">{{$work_order->id}}</option>
                         @endforeach
                     </select>
                 @endif
             
-        </div>
-            <span id="customer_id-error" class="error-message" style="color: red"></span>
+            </div>
+            <span id="work_order_id-error" class="error-message" style="color: red"></span>
         </div>
 
-    <!-- style_code Field -->
-    @if(isset($table_body))
-    <div class="form-group col-sm-3">
-        {!! Form::label('style_code', 'كود القصة:') !!}
-        {!! Form::text('style_code', $invExportOrder->style_code, ['class' => 'form-control text-center']) !!}
-    </div>
-    @else
-    <div class="form-group col-sm-3">
-        {!! Form::label('style_code', 'كود القصة:') !!}
-        {!! Form::text('style_code', null, ['class' => 'form-control text-center']) !!}
-    </div>
-    @endif
-
-        <!-- washing_weight Field -->
-        @if(isset($table_body))
-        <div class="form-group col-sm-3">
-            {!! Form::label('washing_weight', 'وزن الغسلة:') !!}
-            {!! Form::text('washing_weight', $invExportOrder->washing_weight, ['class' => 'form-control text-center']) !!}
-        </div>
-        @else
-        <div class="form-group col-sm-3">
-            {!! Form::label('washing_weight', 'وزن الغسلة:') !!}
-            {!! Form::text('washing_weight', null, ['class' => 'form-control text-center']) !!}
-        </div>
-        @endif
-        <!-- wash_color Field -->
-        @if(isset($table_body))
-        <div class="form-group col-sm-3">
-            {!! Form::label('wash_color', 'لون الغسلة:') !!}
-            {!! Form::text('wash_color', $invExportOrder->wash_color, ['class' => 'form-control text-center']) !!}
-        </div>
-        @else
-        <div class="form-group col-sm-3">
-            {!! Form::label('wash_color', 'لون الغسلة:') !!}
-            {!! Form::text('wash_color', null, ['class' => 'form-control text-center']) !!}
-        </div>
-        @endif
-
-         <!-- stage_id Field -->
-         <div class="form-group col-sm-3">
-            {!! Form::label('stage_id', ' مرحلة الانتاج:') !!}
-            <div id="stage_id-container">
-                @if(isset($invExportOrder)) 
-                    <select name="stage_id" class="form-control stage_id searchable" id="stage_id">
-                        <option value="" disabled>اختر</option>
-        
-                        @foreach($stages as $stage)
-                            <option value="{{ $stage->id }}"{{ $stage->id == $invExportOrder->stage_id ? 'selected' : '' }}>
-                                {{ $stage->name }}
-                            </option>
-                        @endforeach
-                    </select>
-                @else
-                    <select name="stage_id" class="form-control stage_id searchable" id="stage_id">
-                        <option value="" selected disabled>اختر</option>
-                        @foreach($stages as $stage)
-                        <option value="{{$stage->id}}">{{$stage->name}}</option>
-                        @endforeach
-                    </select>
+            <!-- Date In Field -->
+        @if(!isset($table_body))
+            <div class="form-group col-sm-3">
+                {!! Form::label('date_out', 'تاريخ الصرف: <span style="color: red">*</span>', [], false) !!}
+                <input type="text" value='{{ now()->format("Y/m/d H:i:s") }}' class='form-control' name='date_out' id='date_out' readonly>
+                @if ($errors->has('date_out'))
+                    <span class="invalid-feedback" role="alert">
+                        <strong>{{ $errors->first('date_out') }}</strong>
+                    </span>
                 @endif
-            
-        </div>
-            <span id="customer_id-error" class="error-message" style="color: red"></span>
-        </div>
+                <span id="date_out-error" class="error-message" style="color: red"></span>
+            </div>
+        @else
+            <div class="form-group col-sm-3">
+                {!! Form::label('date_out', 'تاريخ الصرف: <span style="color: red">*</span>', [], false) !!}
+                <input type="text" value='{{ now()->format("Y/m/d H:i:s") }}' class='form-control' name='date_out' id='date_out' readonly>
+                @if ($errors->has('date_out'))
+                    <span class="invalid-feedback" role="alert">
+                        <strong>{{ $errors->first('date_out') }}</strong>
+                    </span>
+                @endif
+                <span id="date_out-error" class="error-message" style="color: red"></span>
+            </div>
+        @endif
+
+           <!-- Customer Id Field -->
+           <div class="form-group col-sm-3 {{ (isset($invExportOrder) && in_array($invExportOrder->work_order_id, ['lab', 'spare_parts'])) ? 'd-none' : '' }}" id="div_customer_id">
+                    {!! Form::label('customer_id', ' العميل:') !!}
+                    @if(isset($invExportOrder)) 
+                        {!! Form::hidden('customer_id', $invExportOrder->customer_id, ['class' => 'form-control text-center','id'=>'customer_id','readonly']) !!}
+                        {!! Form::text('customer_name', $invExportOrder->get_customer->name, ['class' => 'form-control text-center','placeholder'=>'اسم العميل"','readonly']) !!}
+                
+                        @else
+                        {!! Form::hidden('customer_id', null, ['class' => 'form-control text-center','id'=>'customer_id','readonly']) !!}
+                        {!! Form::text('customer_name', null, ['class' => 'form-control text-center','id'=>'customer_name','placeholder'=>'اسم العميل','readonly']) !!}
+                    @endif
+                </div>
+        <!-- Washing type Field -->
+        @if(isset($table_body))
+            <div class="form-group col-sm-3 {{ (isset($table_body) && in_array($invExportOrder->work_order_id, ['lab', 'spare_parts'])) ? 'd-none' : '' }}" id="div_washing_type">
+            {!! Form::label('washing_type', 'اللون:') !!}
+            <br>
+                @php
+                $distinctItems = $invExportOrder->get_work_order_stage->pluck('get_sevice_item_stage.get_service_item.name')->filter()->unique()->values();
+                @endphp
+
+                @forelse($distinctItems as $index => $name)
+                    <span class="badge badge-default mr-1">{{ $name }}</span>
+                @empty
+                    <span class="text-muted">-</span>
+                @endforelse
+                </div>
+            @else
+                <div class="form-group col-sm-3" id="div_washing_type">
+                    {!! Form::label('washing_type', 'اللون:') !!}
+
+                </div>
+            @endif
+
+            <!-- product_count Field -->
+            @if(isset($table_body))
+            <div class="form-group col-sm-3 {{ (isset($table_body) && in_array($invExportOrder->work_order_id, ['lab', 'spare_parts'])) ? 'd-none' : '' }}" id="div_product_count">
+                {!! Form::label('product_count', 'عدد الغسلة:') !!}
+                {!! Form::text('product_count', $invExportOrder->get_work_order->product_count ??'', ['class' => 'form-control text-center','readonly','id'=>'product_count']) !!}
+                
+            </div>
+            @else
+            <div class="form-group col-sm-3" id="div_product_count">
+                {!! Form::label('product_count', 'عدد الغسلة:') !!}
+                {!! Form::text('product_count', null, ['class' => 'form-control text-center','readonly','id'=>'product_count']) !!}
+            </div>
+            @endif
+
+                <!-- product_weight Field -->
+                @if(isset($table_body))
+                <div class="form-group col-sm-3 {{ (isset($table_body) && in_array($invExportOrder->work_order_id, ['lab', 'spare_parts'])) ? 'd-none' : '' }}" id="div_product_weight">
+                    {!! Form::label('product_weight', 'وزن الغسلة:') !!}
+                    {!! Form::text('product_weight', $invExportOrder->get_work_order->product_weight ??'', ['class' => 'form-control text-center','readonly','id'=>'product_weight']) !!}
+                </div>
+                @else
+                <div class="form-group col-sm-3" id="div_product_weight">
+                    {!! Form::label('product_weight', 'وزن الغسلة:') !!}
+                    {!! Form::text('product_weight', null, ['class' => 'form-control text-center','id'=>'product_weight','readonly']) !!}
+                </div>
+                @endif
+                <!-- wash_index Field -->
+                @if(isset($table_body))
+                    <div class="form-group col-sm-3 {{ (isset($table_body) && in_array($invExportOrder->work_order_id, ['lab', 'spare_parts'])) ? 'd-none' : '' }}" id="div_wash_index">
+                      {!! Form::label('wash_index', 'ترتيب الغسلة:') !!}
+                      {!! Form::text('wash_index', ($order_position ?? '') . ' من ' . ($receive_receipt_count ?? ''), ['class' => 'form-control text-center','readonly','id'=>'wash_index']) !!}
+                    </div>
+                @else
+                <div class="form-group col-sm-3" id="div_wash_index">
+                    {!! Form::label('wash_index', 'ترتيب الغسلة:') !!}
+                    {!! Form::text('wash_index', null, ['class' => 'form-control text-center','readonly','id'=>'wash_index']) !!}
+                </div>
+                @endif
+
+                <!-- stage_id Field -->
+                <div class="form-group col-sm-3 {{ (isset($invExportOrder) && in_array($invExportOrder->work_order_id, ['lab', 'spare_parts'])) ? 'd-none' : '' }}" id="div_stage_id">
+                    {!! Form::label('stage_id', ' مرحلة الانتاج:') !!}
+                    <div id="stage_id-container">
+                        @if(isset($invExportOrder)) 
+                            <select name="stage_id" class="form-control stage_id searchable" id="stage_id">
+                                <option value="" disabled>اختر</option>
+                
+                                @foreach($invExportOrder->get_work_order_stage as $stage)
+                                    <option value="{{ $stage->get_sevice_item_stage->satge_id }}"{{ $stage->get_sevice_item_stage->satge_id == $invExportOrder->stage_id ? 'selected' : '' }}>
+                                        {{ $stage->get_sevice_item_stage->get_stage->name }}
+                                    </option>
+                                @endforeach
+                            </select>
+                        @else
+                            <select name="stage_id" class="form-control stage_id searchable" id="stage_id">
+                                <option value="" selected disabled>اختر</option>
+                                @foreach($stages as $stage)
+                                <option value="{{$stage->id}}">{{$stage->name}}</option>
+                                @endforeach
+                            </select>
+                        @endif
+                    
+                </div>
+                    <span id="stage_id-error" class="error-message" style="color: red"></span>
+                </div>
 
     <!-- manual_id Field -->
     @if(isset($table_body))
@@ -590,6 +579,92 @@
                         work_order_id = work_order_id;
                 
                     create_tableproducts(category_id_value);
+                    }
+
+                    if (work_order_id === 'lab' || work_order_id === 'spare_parts') {
+                        $('#div_customer_id').addClass('d-none');
+                        $('#div_washing_type').addClass('d-none');
+                        $('#div_product_count').addClass('d-none');
+                        $('#div_product_weight').addClass('d-none');
+                        $('#div_wash_index').addClass('d-none');
+                        $('#div_stage_id').addClass('d-none');
+                    } else {
+                        $('#div_customer_id').removeClass('d-none');
+                        $('#div_washing_type').removeClass('d-none');
+                        $('#div_product_count').removeClass('d-none');
+                        $('#div_product_weight').removeClass('d-none');
+                        $('#div_wash_index').removeClass('d-none');
+                        $('#div_stage_id').removeClass('d-none');
+                        // -----------------------------------------------------
+                        $.ajax({
+                            type: 'get',
+                            url: '{!! URL::to('/get_work_order_data') !!}',
+                            data: { work_order_id: work_order_id },
+
+                            success: function (result) {
+
+                                console.log(result);
+
+                                /* 1- customer */
+                                $('#customer_name').val(result.get_customer ? result.get_customer.name : '');
+                                $('#customer_id').val(result.customer_id ?? '');
+
+                                /* 2- washing_type (distinct service items) */
+                                $('#div_washing_type .badge').remove();
+  
+                                $('#div_washing_type br').remove(); 
+
+                                // Add the break once here
+                                $('#div_washing_type').append('<br>'); 
+
+                                let serviceNames = [];
+
+                                $.each(result.get_work_order_stage, function (key, item) {
+                                    if (
+                                        item.get_service_item &&
+                                        $.inArray(item.get_service_item.name, serviceNames) === -1
+                                    ) {
+                                        serviceNames.push(item.get_service_item.name);
+
+                                        $('#div_washing_type').append(
+                                            '<span class="badge badge-default mr-1">' +
+                                            item.get_service_item.name +
+                                            '</span> '
+                                        );
+                                    }
+                                });
+
+                                /* 3- product_count */
+                                $('#product_count').val(result.product_count ?? '');
+
+                                /* 4- product_weight */
+                                $('#product_weight').val(result.product_weight ?? '');
+
+                                /* 5- wash_index */
+                                $('#wash_index').val(
+                                    (result.order_position ?? '') +
+                                    ' من ' +
+                                    (result.receive_receipt_count ?? '')
+                                );
+
+                                /* 6- stage_id select */
+                                $('#stage_id').empty();
+                                $('#stage_id').append('<option value="">اختر</option>');
+
+                                $.each(result.get_work_order_stage, function (key, item) {
+
+                                    if (item.get_stage) {
+                                        $('#stage_id').append(
+                                            '<option value="' + item.satge_id + '">' +
+                                            item.get_stage.name +
+                                            '</option>'
+                                        );
+                                    }
+                                });
+
+                            }
+                        });
+
                     }
             });
               // ================get product request id===========================================================
