@@ -280,7 +280,7 @@ public function store(CreateInv_importOrderRequest $request)
                   'unit_id'=>$inv_import_details[$i]->unit_id,
                   'quantity_in'=>$total_unitcontent,
                   'store_id'=>$inv_import_details[$i]->store_id,
-                  'created_at'=>now(),
+                  'created_at'=>$invImportOrder->created_at,
                   'flag'=>1
               ];
           }
@@ -308,14 +308,6 @@ public function store(CreateInv_importOrderRequest $request)
         $invImportOrder =Inv_importOrder::with(['get_supplier:name,id',
         'get_user:name,id','invproduct_category:name,id'])->find($id);
         
-        // $table_body=Inv_importorder_details::
-        // with('get_store:name,id')
-        // ->with('product_color.get_product')
-        // ->with('get_unit')
-        // ->with('product_color.get_color:name,id,colorCategory_id')
-        // ->with('product_color.get_color.invcolor_category:name,id')
-        // ->where('invimport_id',$invImportOrder->id)
-        // ->get();
         $table_body = Inv_importorder_details::
         with('get_store:name,id,category_id')
         ->with('product_color.get_product:name,id,category_id,description_id,size_id,weight_id,manual_code')
@@ -571,7 +563,7 @@ public function store(CreateInv_importOrderRequest $request)
                     // 'product_price'=>0,
                     // 'total_product_price'=>0,
                     'store_id'=>$request->store_id[$i],
-                    'created_at'=>$invImportOrder->updated_at,
+                    'created_at'=>$invImportOrder->created_at,
                 ];
             }
             Inv_importorder_details::insert($data2);
@@ -719,11 +711,9 @@ public function store(CreateInv_importOrderRequest $request)
 
         $details= Inv_importorder_details::where('invimport_id',$id)->select('product_id','quantity')->get();
 
-        if ($invImportOrder->product_category_id != 3) {
             if($invImportOrder->status=="Approved"){ 
                 foreach($details as $detail){
-                    $get_qty=Inv_controlStock::where('product_id',$detail->product_id)
-                    ->groupBy('product_id')
+                    $get_qty=Inv_controlStock::where('product_id',$detail->product_id)->groupBy('product_id')
                     ->select(\DB::raw('sum(quantity_in)-sum(quantity_out) as sum '))->first();
                     
                 $residal = $get_qty->sum - $detail->quantity;
@@ -737,26 +727,6 @@ public function store(CreateInv_importOrderRequest $request)
             Inv_importorder_details::where('invimport_id',$invImportOrder->id)->delete();
             Inv_controlStock::where('invimport_export_id',$invImportOrder->id)->where('flag',1)->delete();
 
-        }else{
-            if($invImportOrder->status=="Approved"){
-                foreach($details as $detail){
-                    $get_qty=InvFinalProductStock::where('product_id',$detail->product_id)
-                    ->groupBy('product_id')
-                    ->select(\DB::raw('sum(quantity_in)-sum(quantity_out) as sum '))->first();
-                    
-                $residal = $get_qty->sum - $detail->quantity;
-        
-                    if($residal < 0){
-                        return redirect(route('invImportOrders.index'))->with('error', trans('عفوآ...لايمكن حذف اذن اضافة تم صرف كميه منه'));
-                    }
-                }
-            }
-            $this->invImportOrderRepository->delete($id);
-            Inv_importorder_details::where('invimport_id',$invImportOrder->id)->delete();
-            InvFinalProductStock::where('invimport_export_id',$invImportOrder->id)->where('flag',1)->delete();
-        }
-   
-    
     DB::commit();
     } catch (\Throwable $th) {
      DB::rollBack();

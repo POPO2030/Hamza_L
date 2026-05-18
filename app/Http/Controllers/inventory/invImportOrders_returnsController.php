@@ -427,7 +427,7 @@ for ($i=0; $i <count($request->quantity) ; $i++) {
         'invimport_id' =>$invImport_detials[$i]->invimport_id,
         'product_price' =>$invImport_detials[$i]->product_price,
         'total_product_price' =>$invImport_detials[$i]->product_price * $request->quantity[$i],
-        'created_at'=>$invImportOrdersReturns->updated_at,
+        'created_at'=>$invImportOrdersReturns->created_at,
     ];
 }
 Inv_importorder_details_return::insert($data2);
@@ -448,7 +448,7 @@ Inv_importorder_details_return::insert($data2);
            'unit_id'=>$invImport_detials[$i]->unit_id,
            'quantity_out'=>$total_unitcontent,
            'store_id'=>$invImport_detials[$i]->store_id,
-           'created_at'=>$invImportOrdersReturns->updated_at,
+           'created_at'=>$invImportOrdersReturns->created_at,
            'flag'=>3
        ];
    }
@@ -487,7 +487,7 @@ for ($i=0; $i <count($request->quantity) ; $i++) {
         'quantity' => $request->quantity[$i],
         'store_id' => $invImport_detials[$i]->store_id,
         'invimport_id' =>$invImport_detials[$i]->invimport_id,
-        'created_at'=>$invImportOrdersReturns->updated_at,
+        'created_at'=>$invImportOrdersReturns->created_at,
     ];
 }
 Inv_importorder_details_return::insert($data2);
@@ -508,7 +508,7 @@ Inv_importorder_details_return::insert($data2);
            'unit_id'=>$invImport_detials[$i]->unit_id,
            'quantity_out'=>$total_unitcontent,
            'store_id'=>$invImport_detials[$i]->store_id,
-           'created_at'=>$invImportOrdersReturns->updated_at,
+           'created_at'=>$invImportOrdersReturns->created_at,
            'flag'=>3
        ];
    }
