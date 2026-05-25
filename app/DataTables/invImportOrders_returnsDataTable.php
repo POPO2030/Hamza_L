@@ -40,38 +40,39 @@ class invImportOrders_returnsDataTable extends DataTable
      * @return \Yajra\DataTables\Html\Builder
      */
         
-    public function html()
-    {
-        if (Gate::allows(['invImportOrdersReturns.create'])) {
-        $buttonHtml = '<div class="button-container" >';
-        $buttonHtml .= '<button type="button" class="btn btn-primary btn-sm no-corner" data-toggle="modal" data-target="#myModal" >';
-        $buttonHtml .= '<i class="fas fa-plus"></i> اضافه';
-        $buttonHtml .= '</button>';
-        $buttonHtml .= '</div>';
-    }else{
-        $buttonHtml = '';
-    }
-        $buttons = [
-            ['extend' => 'export', 'className' => 'btn btn-default btn-sm no-corner'],
-            ['extend' => 'print', 'className' => 'btn btn-default btn-sm no-corner'],
-        ];
-    
-        $dataTable = $this->builder()
-            ->columns($this->getColumns())
-            ->minifiedAjax();
-    
-        if (Gate::any(['invImportOrdersReturns.show', 'invImportOrdersReturns.edit', 'invImportOrdersReturns.destroy'])) {
-            $dataTable->addAction(['title' => 'الاجراءات', 'width' => '120px', 'printable' => false]);
-        }
-
-        return $dataTable->parameters([
-            'dom'       => 'Bfrtip',
-            'stateSave' => true,
-            'order'     => [[0, 'desc']],
-            'buttons'   => [$buttonHtml,$buttons],
-            'language'  => ['url' => 'js/translate_data_table.json'],
-        ]);
-}
+     public function html()
+     {
+         if (Gate::allows(['invImportOrdersReturns.create'])) {
+             $buttonHtml = '<div class="button-container" >';
+             $buttonHtml .= '<button type="button" class="btn btn-primary btn-sm no-corner" data-toggle="modal" data-target="#myModal" >';
+             $buttonHtml .= '<i class="fas fa-plus"></i> اضافه';
+             $buttonHtml .= '</button>';
+             $buttonHtml .= '</div>';
+         } else {
+             $buttonHtml = '';
+         }
+     
+         $buttons = [
+             ['extend' => 'export', 'className' => 'btn btn-default btn-sm no-corner'],
+             ['extend' => 'print',  'className' => 'btn btn-default btn-sm no-corner'],
+         ];
+     
+         $dataTable = $this->builder()
+             ->columns($this->getColumns())
+             ->minifiedAjax();
+     
+         if (Gate::any(['invImportOrdersReturns.show', 'invImportOrdersReturns.edit', 'invImportOrdersReturns.destroy'])) {
+             $dataTable->addAction(['title' => 'الاجراءات', 'width' => '120px', 'printable' => false]);
+         }
+     
+         return $dataTable->parameters([
+             'dom'       => 'Bfrtip',
+             'stateSave' => true,
+             'order'     => [[0, 'desc']],
+             'buttons'   => [['text' => $buttonHtml], $buttons],  
+             'language'  => ['url' => 'js/translate_data_table.json'],
+         ]);
+     }
     
     
     
@@ -84,7 +85,7 @@ class invImportOrders_returnsDataTable extends DataTable
     protected function getColumns()
     {
         return [
-            "الرقم_التسلسلى"=>['name'=>'id','data'=>'id'],
+            "م"=>['name'=>'id','data'=>'id'],
             "تاريخ_الصرف"=>['name'=>'date_out','data'=>'date_out'],
             "الملاحظات"=>['name'=>'comment','data'=>'comment'],
             // 'customer_id'=>new \Yajra\DataTables\Html\Column([

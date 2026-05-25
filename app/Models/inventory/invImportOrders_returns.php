@@ -33,7 +33,6 @@ class invImportOrders_returns extends Model
         'invimport_id_return',            //id= الاب المرتجع
         'date_out',
         'comment',
-        'product_category_id',
         'supplier_id',
         'user_id',
         'updated_by',

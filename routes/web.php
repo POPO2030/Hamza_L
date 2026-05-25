@@ -586,7 +586,7 @@ Route::delete('colorCodes/{id}', ['as'=>'colorCodes.destroy', 'uses'=>'inventory
 // =======================================End colorCodes=======================
 
 // Route::resource('invImportOrdersReturns', App\Http\Controllers\inventory\invImportOrders_returnsController::class);
-Route::get('invImportOrdersReturns', ['as'=>'invImportOrders_Returns.index', 'uses'=>'inventory\invImportOrders_returnsController@index'])->middleware('can:invImportOrders_Returns.index');
+Route::get('invImportOrdersReturns', ['as'=>'invImportOrdersReturns.index', 'uses'=>'inventory\invImportOrders_returnsController@index'])->middleware('can:invImportOrdersReturns.index');
 Route::get('invImportOrdersReturns/select_import_orders', ['as'=>'invImportOrdersReturns.select_import_orders', 'uses'=>'inventory\invImportOrders_returnsController@show_import_orders'])->middleware('can:invImportOrdersReturns.select_import_orders');
 Route::get('invImportOrdersReturns/create/{id?}', ['as'=>'invImportOrdersReturns.create', 'uses'=>'inventory\invImportOrders_returnsController@create'])->middleware('can:invImportOrdersReturns.create');
 Route::post('invImportOrdersReturns/', ['as'=>'invImportOrdersReturns.store', 'uses'=>'inventory\invImportOrders_returnsController@store'])->middleware('can:invImportOrdersReturns.store');

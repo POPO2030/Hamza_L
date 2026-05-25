@@ -43,9 +43,9 @@ class invImportOrders_returnsController extends AppBaseController
      */
     public function index(invImportOrders_returnsDataTable $invImportOrdersReturnsDataTable)
     {
-        $importorders_customers = Inv_importOrder::where('product_category_id','<>',3)->select('id')->get();
+        $importorders_suppliers = Inv_importOrder::select('id','supplier_id')->with('get_supplier:name,id')->get();
 
-        return $invImportOrdersReturnsDataTable->render('inv_import_orders_returns.index',['importorders_customers'=>$importorders_customers]);
+        return $invImportOrdersReturnsDataTable->render('inv_import_orders_returns.index',['importorders_suppliers'=>$importorders_suppliers]);
     }
 
     /**
@@ -140,7 +140,7 @@ class invImportOrders_returnsController extends AppBaseController
         //  return $request;
 
          if(!count($request->quantity)){
-        return redirect()->route('invImportOrders_Returns.index')->with('error', trans('عفوآ...لم يتم العثور على اذن الاستلام'));  
+        return redirect()->route('invImportOrdersReturns.index')->with('error', trans('عفوآ...لم يتم العثور على اذن الاستلام'));  
 
          }
         $invImportOrder =Inv_importOrder::find($request->ImportOrderid);
@@ -162,7 +162,7 @@ class invImportOrders_returnsController extends AppBaseController
                     //                         ->first();
                     //          $check = $sum_qty->sum - $request->quantity[$i];
                     //          if($check < 0){
-                    //            return redirect(route('invImportOrders_Returns.index'))->with('error', trans('عفوآ...كميه المرتجع اكبر من الكميه المتاحه'));
+                    //            return redirect(route('invImportOrdersReturns.index'))->with('error', trans('عفوآ...كميه المرتجع اكبر من الكميه المتاحه'));
                     //          }
                     //     }
                     // }
@@ -252,7 +252,7 @@ class invImportOrders_returnsController extends AppBaseController
 
     }
 
-        return redirect(route('invImportOrders_Returns.index'))->with('success', trans('تنبيه...تم حفظ اذن المرتجع بنجاح'));  
+        return redirect(route('invImportOrdersReturns.index'))->with('success', trans('تنبيه...تم حفظ اذن المرتجع بنجاح'));  
     }
 
 
@@ -262,7 +262,7 @@ class invImportOrders_returnsController extends AppBaseController
         with(['get_user:name,id','invproduct_category:name,id','get_supplier:name,id'])->find($id);
        
         if (empty($invImportOrder_return)) {
-            return redirect(route('invImportOrders_Returns.index'))->with('error', trans('عفوآ...لم يتم العثور على اذن المرتجع'));  
+            return redirect(route('invImportOrdersReturns.index'))->with('error', trans('عفوآ...لم يتم العثور على اذن المرتجع'));  
         }
         
         $inv_importOrder_details =Inv_importorder_details::where('invimport_id',$invImportOrder_return->invimport_id)->get();
@@ -295,7 +295,7 @@ class invImportOrders_returnsController extends AppBaseController
         with(['get_user:name,id','invproduct_category:name,id','get_supplier:name,id'])->find($id);
        
         if (empty($invImportOrder_return)) {
-            return redirect(route('invImportOrders_Returns.index'))->with('error', trans('عفوآ...لم يتم العثور على اذن المرتجع'));  
+            return redirect(route('invImportOrdersReturns.index'))->with('error', trans('عفوآ...لم يتم العثور على اذن المرتجع'));  
         }
 
         $inv_importOrder_details =Inv_importorder_details::where('invimport_id',$invImportOrder_return->invimport_id)->get();
@@ -342,7 +342,7 @@ class invImportOrders_returnsController extends AppBaseController
         $invImportOrdersReturns = $this->invImportOrdersReturnsRepository->find($id);
 
         if (empty($invImportOrdersReturns)) {
-            return redirect(route('invImportOrders_Returns.index'))->with('error', trans('عفوآ...لم يتم العثور على اذن المرتجع'));  
+            return redirect(route('invImportOrdersReturns.index'))->with('error', trans('عفوآ...لم يتم العثور على اذن المرتجع'));  
         }
        
 
@@ -523,7 +523,7 @@ Inv_importorder_details_return::insert($data2);
     
     }
 
-         return redirect(route('invImportOrders_Returns.index'))->with('success', trans('تنبيه...تم تعديل مرتجع بنجاح'));  
+         return redirect(route('invImportOrdersReturns.index'))->with('success', trans('تنبيه...تم تعديل مرتجع بنجاح'));  
     }
 
     public function destroy($id)
@@ -533,7 +533,7 @@ Inv_importorder_details_return::insert($data2);
         $invImportOrdersReturns = $this->invImportOrdersReturnsRepository->find($id);
 
         if (empty($invImportOrdersReturns)) {
-            return redirect(route('invImportOrders_Returns.index'))->with('error', trans('عفوآ...لم يتم العثور على اذن المرتجع'));  
+            return redirect(route('invImportOrdersReturns.index'))->with('error', trans('عفوآ...لم يتم العثور على اذن المرتجع'));  
         }
 
 
@@ -547,6 +547,6 @@ Inv_importorder_details_return::insert($data2);
         throw $th;
     
     }
-         return redirect(route('invImportOrders_Returns.index'))->with('success', trans('تنبيه...تم حذف اذن المرتجع بنجاح'));  
+         return redirect(route('invImportOrdersReturns.index'))->with('success', trans('تنبيه...تم حذف اذن المرتجع بنجاح'));  
     }
 }

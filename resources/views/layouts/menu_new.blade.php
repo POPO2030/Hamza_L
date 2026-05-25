@@ -469,6 +469,15 @@
                   </a>
                   @endcan
                 </li>
+                <li class="nav-item {{cuurentroute('invImportOrdersReturns.index','active')}}">
+                  @can('invImportOrdersReturns.index')
+                  <a href="{{ route('invImportOrdersReturns.index') }}"
+                  class="nav-link {{ Request::is('invImportOrdersReturns*') ? 'active' : '' }}" >
+                  <i class="fas fa-pallet"></i>
+                  <span class="menu-item-text">اذن مرتجع بضاعة</span>
+                  </a>
+                  @endcan
+                </li>
                 <li class="nav-item {{cuurentroute('invStockTransfers.index','active')}}">
                   @can('invStockTransfers.index')
                   <a href="{{ route('invStockTransfers.index') }}"

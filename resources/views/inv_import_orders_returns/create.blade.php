@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @push('page_css')
-{{-- <link rel="stylesheet" type="text/css" href="{{ asset('css/views_css/header_heartbeat.css') }}"> --}}
+<link rel="stylesheet" type="text/css" href="{{ asset('css/views_css/header_heartbeat.css') }}">
 @endpush
 
 @section('title')
@@ -42,7 +42,7 @@
 
             <div class="card-footer">
               {!! Form::submit('حفظ', ['class' => 'btn btn-success btn-sm save']) !!}
-                <a href="{{ route('invImportOrders_Returns.index') }}"class="btn btn-secondary btn-sm">الغاء</a>
+                <a href="{{ route('invImportOrdersReturns.index') }}"class="btn btn-secondary btn-sm">الغاء</a>
             </div>
 
             {!! Form::close() !!}

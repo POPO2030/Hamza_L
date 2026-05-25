@@ -317,6 +317,14 @@ return[
         'invExportOrders.update'=>'تعديل اذن الصرف',
         'invExportOrders.destroy'=>'حذف اذن الصرف',
 
+        'invImportOrdersReturns.index'=>'اذن مرتجع بضاعة',
+        'invImportOrdersReturns.create'=>'انشاء مرتجع بضاعة',
+        'invImportOrdersReturns.store'=>'حفظ مرتجع بضاعة',
+        'invImportOrdersReturns.show'=>'تفاصيل مرتجع بضاعة',
+        'invImportOrdersReturns.edit'=>'عرض مرتجع بضاعة',
+        'invImportOrdersReturns.update'=>'تعديل مرتجع بضاعة',
+        'invImportOrdersReturns.destroy'=>'حذف مرتجع بضاعة',
+
         'invStockTransfers.index'=>'اذن التحويل',
         'invStockTransfers.create'=>'انشاء اذن التحويل',
         'invStockTransfers.store'=>'حفظ اذن التحويل',
