@@ -174,82 +174,91 @@ public function total_Products_report()
 
 public function total_Products_report_result(Request $request)
 {
-    // return $request;
-    $stock = Inv_controlStock::with([
-            'get_unit_content',
-            'get_unit:name,id',
-            'get_supplier:name,id',
-            'get_product_color.get_color:name,id,colorCategory_id,color_code_id',
-            'get_product_color.get_color.invcolor_category:name,id',
-            'get_product_color.get_color.get_color_code:name,id',
-            'get_product_color.get_product:name,id,size_id,weight_id,category_id,manual_code,system_code,product_price',
-            'get_product_color.images',
-            'get_product_color.get_product.invproduct_category:name,id',
-    ]);
-
-        if ($request->store_id !=='all') {
-            $stock=$stock->where('store_id',$request->store_id);
+    // Base query builder with filters applied — reusable closure
+    $applyFilters = function ($query) use ($request) {
+        if ($request->store_id !== 'all') {
+            $query->where('store_id', $request->store_id);
         }
 
-        if ($request->product_id !=='all') {
-            $stock=$stock->where('product_id',$request->product_id);
+        if ($request->product_id !== 'all') {
+            $query->where('product_id', $request->product_id);
         }
-        
-        if ($request->category_id !=='all') {
-            $stock = $stock->whereHas('get_product_color.get_product', function ($query) use ($request) {
-                $query->where('category_id', $request->category_id);
+
+        if ($request->category_id !== 'all') {
+            $query->whereHas('get_product_color.get_product', function ($q) use ($request) {
+                $q->where('category_id', $request->category_id);
             });
         }
-        
+
         if ($request->supplier_id !== 'all') {
-            $stock = $stock->where('supplier_id', $request->supplier_id);
+            $query->where('supplier_id', $request->supplier_id);
         }
 
         if ($request->color_id !== 'all') {
-            $stock = $stock->whereHas('get_product_color', function ($query) use ($request) {
-                $query->where('color_id', $request->color_id);
+            $query->whereHas('get_product_color', function ($q) use ($request) {
+                $q->where('color_id', $request->color_id);
             });
         }
 
-        // if (isset($request->from)) {
-        //         $result=$stock->where('created_at','>=',$request->from);
-        // }
-        // if (isset($request->to)) {
-        //         $result=$stock->where('created_at','<=',$request->to.' 23:59:59');
-        // } 
         if ($request->filled('from')) {
-            $stock->where('created_at', '>=', $request->from);
+            $query->where('created_at', '>=', $request->from);
         }
-        
+
         if ($request->filled('to')) {
-            $stock->where('created_at', '<=', $request->to . ' 23:59:59');
+            $query->where('created_at', '<=', $request->to . ' 23:59:59');
         }
 
-        // $result=$stock->groupBy('product_id')
-        // ->select(\DB::raw('sum(quantity_in)-sum(quantity_out) as sum ,product_id'),'store_id','invimport_export_id','unit_id','supplier_id','customer_id')
-        // ->get();
-        $result = $stock->select('product_id',\DB::raw('SUM(quantity_in) - SUM(quantity_out) as sum'),'unit_id')->groupBy('product_id')->get();
-      
-        $productIds = $result->pluck('product_id');
-        
-        $suppliers = Inv_controlStock::whereIn('product_id', $productIds)->with('get_supplier:id,name')->get()->groupBy('product_id');
-        
-        $result = $result->map(function ($item) use ($suppliers) {
-            $item->suppliers = isset($suppliers[$item->product_id])? $suppliers[$item->product_id]->pluck('get_supplier.name')->unique()->values(): [];
-            $item->stores = isset($suppliers[$item->product_id])? $suppliers[$item->product_id]->pluck('get_store.name')->unique()->values(): [];
-            return $item;
-        });
-        // return $result;
+        return $query;
+    };
 
-        if ($request->balance !== 'all') {
-            $result = $result->where('sum', '>',0);                                         
-        }
+    // Main stock query
+    $stock = Inv_controlStock::with([
+        'get_unit_content',
+        'get_unit:name,id',
+        'get_supplier:name,id',
+        'get_product_color.get_color:name,id,colorCategory_id,color_code_id',
+        'get_product_color.get_color.invcolor_category:name,id',
+        'get_product_color.get_color.get_color_code:name,id',
+        'get_product_color.get_product:name,id,size_id,weight_id,category_id,manual_code,system_code,product_price',
+        'get_product_color.images',
+        'get_product_color.get_product.invproduct_category:name,id',
+    ]);
 
-// return  $result_final_product;
+    $stock = $applyFilters($stock);
+
+    $result = $stock->select('product_id', \DB::raw('SUM(quantity_in) - SUM(quantity_out) as sum'), 'unit_id')
+        ->groupBy('product_id')
+        ->get();
+
+    $productIds = $result->pluck('product_id');
+
+    // ✅ Suppliers query now also uses the same filters
+    $suppliersQuery = Inv_controlStock::whereIn('product_id', $productIds)
+        ->with(['get_supplier:id,name', 'get_store:id,name']);
+
+    $suppliersQuery = $applyFilters($suppliersQuery);
+
+    $suppliers = $suppliersQuery->get()->groupBy('product_id');
+
+    $result = $result->map(function ($item) use ($suppliers) {
+        $item->suppliers = isset($suppliers[$item->product_id])
+            ? $suppliers[$item->product_id]->pluck('get_supplier.name')->unique()->values()
+            : [];
+        $item->stores = isset($suppliers[$item->product_id])
+            ? $suppliers[$item->product_id]->pluck('get_store.name')->unique()->values()
+            : [];
+        return $item;
+    });
+
+    if ($request->balance !== 'all') {
+        $result = $result->where('sum', '>', 0);
+    }
+
     return view('reports.total_reports_result')
-    ->with(['result'=>$result,
+        ->with([
+            'result'  => $result,
             'request' => $request,
-    ]); 
+        ]);
 }
 
 
@@ -339,71 +348,6 @@ public function wash_chemical_report_result(Request $request)
 
 
 
-// public function model_reports()
-// {
-//     $model = Model_name::select('model_code','id')->get();
-
-//     return view('reports.model_reports')->with([
-//         'model'=>$model,
-//     ]);
-// }
-
-// public function model_reports_result(Request $request)
-// {
-//     // return $request;
-//         $model_code= Model_name::where('id',$request->model_id)->select('model_code')->first();
-//         $model = Model_name::select('model_code','id')->get();
-//         $result=Inv_controlStock::
-//         with([
-//             'get_store:name,id',
-//             'get_unit:name,id',
-//             'get_model:model_code,id',
-//             'get_Inv_importOrder.get_supplier:name,id',
-//             // 'get_Inv_exportOrder.get_customer:name,id',
-//             // 'get_Inv_exportOrder.get_spendto:name,id',
-//             'get_product_color.get_color_categories:name,id',
-//             'get_product_color.get_color:name,id,colorCategory_id',
-//             'get_product_color.get_product:name,id,size_id,weight_id,category_id,product_price',
-//             'get_product_color.get_product.get_size:name,id',
-//             'get_product_color.get_product.get_weight:name,id',
-//             'get_product_color.get_product.invproduct_category:name,id'
-//         ]);
-
-//         if($request->model_id !=='all'){
-//             $result=$result->where('model_id',$request->model_id);
-//         }       
-//         $result = $result->get();
-//         // return $result;
-
-        
-//         // return $model_name;
-//         $result_cloth=Inv_stockOut::
-//         with([
-//             'get_stock_out_details.get_store:name,id',
-//             'get_stock_out_details',
-//             // 'get_customer:name,id',
-//             'get_stock_out_details.get_product.get_color.invcolor_category:name,id',
-//             'get_control_stock_to',
-//         ]);
-
-//         if($request->model_id !=='all'){
-//             $result_cloth=$result_cloth->where('model_name_id',$request->model_id);
-//         }       
-//         $result_cloth = $result_cloth
-//         ->get();
-//         // return $result_cloth;
-
-//     return view('reports.model_reports_result')
-//     ->with([ 
-//     'result' => $result,
-//     'result_cloth' => $result_cloth,
-//     'model' => $model,
-//     'model_code' => $model_code,
-//     ]); 
-
-
-    
-// }
 
 // public function total_cloth_report()
 // {
@@ -544,32 +488,5 @@ if ($request->type =='with') {
     
 }
 
-// public function residual_reports()
-// {
-//     // $cloth_residual = Cloth_residual::select('name','id')->get();
-//     $model = Model_name::select('model_code','id')->get();
-
-//     return view('reports.residual_reports')->with([
-//         'model'=>$model,
-//     ]);
- 
-// }
-
-// public function residual_reports_result(Request $request)
-// {
-//     $cloth_residual = Cloth_residual::with(['get_model_name:model_code,id','get_color_id:name,id',
-//     'get_product_color.get_product.invproduct_category:name,id',
-//     'get_product_color.get_color.invcolor_category:name,id',
-//     'get_thread_out.get_product.invproduct_category:name,id',
-//     'get_thread_out.get_color.invcolor_category:name,id',
-//     ])
-//     ->where('model_id', $request->model_id)->get();
-
-//     // return $cloth_residual;
-//     return view('reports.residual_reports_result')->with([
-//         'cloth_residual'=>$cloth_residual,
-//     ]);
-
-// }
 
 }

@@ -22,7 +22,7 @@
             }
             body {
                 background-color: white !important;
-                zoom: 90% !important;
+                zoom: 100% !important;
             }
             body * {
                 visibility: hidden !important;

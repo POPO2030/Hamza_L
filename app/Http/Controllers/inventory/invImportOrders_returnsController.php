@@ -137,36 +137,12 @@ class invImportOrders_returnsController extends AppBaseController
 
     public function store(CreateinvImportOrders_returnsRequest $request)
     {
-        //  return $request;
 
          if(!count($request->quantity)){
         return redirect()->route('invImportOrdersReturns.index')->with('error', trans('عفوآ...لم يتم العثور على اذن الاستلام'));  
 
          }
         $invImportOrder =Inv_importOrder::find($request->ImportOrderid);
-       
-      
-        // ======================================================================================
-                    // for ($i=0; $i <count($request->product_id) ; $i++) { 
-                    //     if($request->quantity[$i]>0){
-                    //     $productId = $request->product_id[$i];
-                    //     $invImportDetail = Inv_importorder_details::where('invimport_id', $invImportOrder->id)
-                    //         ->where('product_id', $productId)
-                    //         ->first();
-
-                    //         $sum_qty=Inv_controlStock::where('product_id',$productId)
-                    //                         ->where('supplier_id', $invImportOrder->supplier_id)
-                    //                         ->groupBy('product_id')
-                    //                         // ->select(\DB::raw('sum(quantity_in)-sum(quantity_out) as sum,product_id '))
-                    //                         ->selectRaw('sum(quantity_in) - sum(quantity_out) as sum, product_id')
-                    //                         ->first();
-                    //          $check = $sum_qty->sum - $request->quantity[$i];
-                    //          if($check < 0){
-                    //            return redirect(route('invImportOrdersReturns.index'))->with('error', trans('عفوآ...كميه المرتجع اكبر من الكميه المتاحه'));
-                    //          }
-                    //     }
-                    // }
-      // ======================================================================================
         try {
             DB::beginTransaction();
     // -----------------insert Import Order Return-----------------
@@ -281,21 +257,22 @@ class invImportOrders_returnsController extends AppBaseController
 
         $import_order_return =invImportOrders_returns::where('invimport_id',$invImportOrder_return->invimport_id)->with('get_details')->get();
 
-        // $import_order_return_details = $import_order_return->flatMap(function ($import_order) {
-        //     return $import_order->get_details;
-        // })->groupBy('product_id')->map(function ($group, $product_id) {
-        //     return [
-        //         'product_id' => $product_id,
-        //         'quantity' => $group->sum('quantity')
-        //     ];
-        // })->values();
+        $import_order_return_details = $import_order_return->flatMap(function ($import_order) {
+            return $import_order->get_details;
+        })->groupBy('product_id')->map(function ($group, $product_id) {
+            return [
+                'product_id' => $product_id,
+                'quantity' => $group->sum('quantity')
+            ];
+        })->values();
     
-    //    return $table_body;
+    //    return $import_order_return_details;
         return view('inv_import_orders_returns.show')
         ->with([
             'invImportOrder_return'=> $invImportOrder_return,
             'table_body'=> $table_body,
             'inv_importOrder_details'=> $inv_importOrder_details,
+            'import_order_return_details'=> $import_order_return_details,
         ]);
     }
 
@@ -345,70 +322,18 @@ class invImportOrders_returnsController extends AppBaseController
         ]);
     }
 
+public function update($id, UpdateinvImportOrders_returnsRequest $request)
+{
+    $invImportOrdersReturns = $this->invImportOrdersReturnsRepository->find($id);
 
-    public function update($id, UpdateinvImportOrders_returnsRequest $request)
-    {
-        // return $request;
-        $invImportOrdersReturns = $this->invImportOrdersReturnsRepository->find($id);
+    if (empty($invImportOrdersReturns)) {
+        return redirect(route('invImportOrdersReturns.index'))->with('error', trans('عفوآ...لم يتم العثور على اذن المرتجع'));  
+    }
 
-        if (empty($invImportOrdersReturns)) {
-            return redirect(route('invImportOrdersReturns.index'))->with('error', trans('عفوآ...لم يتم العثور على اذن المرتجع'));  
-        }
-       
+    try {
+        DB::beginTransaction();
 
-    //            // ================================start Validation for Exceeding Maximum Return Quantity per Product======================
-    //            // ================================التحقق من تجاوز الحد الأقصى لكمية الإرجاع لكل منتج======================
-    //    $old_product=Inv_importorder_details_return::where('invimport_id_return',$id)->pluck('product_id')->toArray();
-
-    //    if(count($old_product) > count($request->product_id)){
-
-    //        $result= array_diff($old_product,$request->product_id);
-
-    //        for ($i = 0; $i < count(((array_values($result)))); $i++) {
-    //        $sum_product_qty = Inv_controlStock::where('product_id', ((array_values($result)))[$i] )
-    //        ->groupBy('product_id')
-    //        ->selectRaw('sum(quantity_in) - sum(quantity_out) as sum')
-    //        ->first();
-
-    //        $old_qty=Inv_importorder_details_return::where('invimport_id_return',$id)->where('product_id', ((array_values($result)))[$i])
-    //        ->select('quantity')->first();
-
-    //        $check = $sum_product_qty->sum - $old_qty->quantity;
-    //        if($check < 0){
-    //            return redirect()->back()->with('error', trans('عفوآ...تم الوصول للحد الاقصي من المنتجات على اذن المرتجع الواحد'));
-    //        }
-    //        }
-    //    }
-    //  // ================================End of Validation for Exceeding Maximum Return Quantity per Product======================
-    //    // ============================== start of Validation for Adjusting Quantity in Import Order Returns====================  
-    //         for ($i = 0; $i < count($request->product_id); $i++) {
-    //             if($request->quantity[$i]>0){                
-    //             $old_quantity=Inv_importorder_details_return::where('invimport_id_return', $invImportOrdersReturns->id)
-    //             ->where('product_id',$request->product_id[$i])->first();
-    //             // return $old_quantity;
-    //             if ($old_quantity) {
-  
-    //               $sum_qty=Inv_controlStock::where('product_id',$request->product_id[$i])
-    //               ->groupBy('product_id') 
-    //               ->selectRaw('sum(quantity_in) - sum(quantity_out) as sum, product_id')
-    //               ->first();
-    //               $total_qty= $old_quantity->quantity + $sum_qty->sum;
-    //               $check = $total_qty - $request->quantity[$i];
-    //             if($check < 0){
-    //                 return redirect()->back()->with('error', trans('عفوآ...لايمكن التعديل كميه الصرف اكبر من الكميه المتاحه'));
-    //             }
-
-    //           }
-
-    //             }
-    //         }
-    //    // =================================================================================================================
-   
-            
-        try {
-            DB::beginTransaction();
-// -----------------insert Import Order Return-----------------
-
+        // -----------------update Import Order Return-----------------
         $input = $request->all();
         $input['date_out']=$invImportOrdersReturns->date_out;
         $input['comment']=$request->comment;
@@ -417,74 +342,88 @@ class invImportOrders_returnsController extends AppBaseController
         $input['updated_by']=Auth::user()->id;
         $invImportOrdersReturns = $this->invImportOrdersReturnsRepository->update($input, $id);
 
-        $invImport_detials =Inv_importorder_details_return::where('invimport_id_return',$invImportOrdersReturns->id)->get();
-        Inv_importorder_details_return::where('invimport_id_return',$invImportOrdersReturns->id)->delete();
-            
-        Inv_controlStock::where('invimport_export_id',$invImportOrdersReturns->id)->where('flag',3)->delete();
-       
-        Supplier_details::where('invimport_id',$invImportOrdersReturns->invimport_id)->where('flag',3)->delete();
- // -----------------insert invimport Details return-----------------
+        $invImport_detials = Inv_importorder_details_return::where('invimport_id_return', $invImportOrdersReturns->id)->get();
 
-            $data2=[];
-            for ($i=0; $i <count($request->quantity) ; $i++) { 
-                $data2[$i]=[
-                    'invimport_id_return' => $invImportOrdersReturns->id,
-                    'product_id' => $invImport_detials[$i]->product_id,
-                    'unit_id' => $invImport_detials[$i]->unit_id,
-                    'quantity' => $request->quantity[$i],
-                    'store_id' => $invImport_detials[$i]->store_id,
-                    'invimport_id' =>$invImport_detials[$i]->invimport_id,
-                    'product_price' =>$invImport_detials[$i]->product_price,
-                    'total_product_price' =>$invImport_detials[$i]->product_price * $request->quantity[$i],
-                    'created_at'=>$invImportOrdersReturns->created_at,
-                ];
+        // ---- find removed products and delete their records ----
+        $old_product_ids = $invImport_detials->pluck('product_id')->toArray();
+        $submitted_product_ids = $request->product_id ?? [];
+        $removed_product_ids = array_diff($old_product_ids, $submitted_product_ids);
+
+        if (!empty($removed_product_ids)) {
+            Inv_importorder_details_return::where('invimport_id_return', $invImportOrdersReturns->id)->whereIn('product_id', $removed_product_ids)->delete();
+
+            Inv_controlStock::where('invimport_export_id', $invImportOrdersReturns->id)->where('flag', 3)->whereIn('product_id', $removed_product_ids)->delete();
+        }
+        // --------
+
+        Inv_importorder_details_return::where('invimport_id_return', $invImportOrdersReturns->id)->delete();
+        Inv_controlStock::where('invimport_export_id', $invImportOrdersReturns->id)->where('flag', 3)->delete();
+        Supplier_details::where('invimport_id', $invImportOrdersReturns->invimport_id)->where('flag', 3)->delete();
+
+        // -----------------re-insert invimport Details return-----------------
+        $data2 = [];
+        for ($i = 0; $i < count($request->quantity); $i++) {
+            // ----skip products that were removed ----
+            if (in_array($request->product_id[$i], $removed_product_ids)) {
+                continue;
             }
-            Inv_importorder_details_return::insert($data2);
-            // -----------------insert Control stock -----------------
-            $data3=[];
-            for ($i=0; $i <count($request->quantity) ; $i++) { 
+            // --------
+            $data2[$i] = [
+                'invimport_id_return' => $invImportOrdersReturns->id,
+                'product_id' => $invImport_detials[$i]->product_id,
+                'unit_id' => $invImport_detials[$i]->unit_id,
+                'quantity' => $request->quantity[$i],
+                'store_id' => $invImport_detials[$i]->store_id,
+                'invimport_id' => $invImport_detials[$i]->invimport_id,
+                'product_price' => $invImport_detials[$i]->product_price,
+                'total_product_price' => $invImport_detials[$i]->product_price * $request->quantity[$i],
+                'created_at' => $invImportOrdersReturns->created_at,
+            ];
+        }
+        Inv_importorder_details_return::insert($data2);
 
-                $productID =product_color::where('id',$invImport_detials[$i]->product_id)->pluck('product_id');
-                
-                $unitcontent=Inv_ProductUnit::select('unitcontent')
-                ->where('product_id',$productID)
-                ->where('unit_id',$invImport_detials[$i]->unit_id)->first();
-
-                $total_unitcontent=$unitcontent->unitcontent*$request->quantity[$i];
-                $data3[$i]=[
-                    'invimport_export_id'=>$invImportOrdersReturns->id,
-                    'product_id'=>$invImport_detials[$i]->product_id,
-                    'unit_id'=>$invImport_detials[$i]->unit_id,
-                    'quantity_out'=>$total_unitcontent,
-                    'store_id'=>$invImport_detials[$i]->store_id,
-                    'created_at'=>$invImportOrdersReturns->created_at,
-                    'flag'=>3
-                ];
+        // -----------------re-insert Control stock-----------------
+        $data3 = [];
+        for ($i = 0; $i < count($request->quantity); $i++) {
+            // ----skip products that were removed ----
+            if (in_array($request->product_id[$i], $removed_product_ids)) {
+                continue;
             }
-            Inv_controlStock::insert($data3);
+            // --------
+            $productID = product_color::where('id', $invImport_detials[$i]->product_id)->pluck('product_id');
+            $unitcontent = Inv_ProductUnit::select('unitcontent')->where('product_id', $productID)->where('unit_id', $invImport_detials[$i]->unit_id)->first();
 
-                // -----------------------insert supplier details----------------------
-                    $sum_total_product_price =Inv_importorder_details_return::where('invimport_id_return',$invImportOrdersReturns->id)->sum('total_product_price');
+            $total_unitcontent = $unitcontent->unitcontent * $request->quantity[$i];
+            $data3[$i] = [
+                'invimport_export_id' => $invImportOrdersReturns->id,
+                'product_id' => $invImport_detials[$i]->product_id,
+                'unit_id' => $invImport_detials[$i]->unit_id,
+                'quantity_out' => $total_unitcontent,
+                'store_id' => $invImport_detials[$i]->store_id,
+                'created_at' => $invImportOrdersReturns->created_at,
+                'flag' => 3
+            ];
+        }
+        Inv_controlStock::insert($data3);
 
-                    $supplier_details = Supplier_details::create([
-                            'invimport_id'=>$invImportOrdersReturns->invimport_id,
-                            'cash_balance_debit' => $sum_total_product_price,
-                            'supplier_id' => $invImportOrdersReturns->supplier_id,
-                            'flag' => 3,
-                            'note'=>'مرتجع اذن رقم'.$invImportOrdersReturns->id,
-                        ]);
-            
-                //   -------------------------------------------------
+        // -----------------------re-insert supplier details----------------------
+        $sum_total_product_price = Inv_importorder_details_return::where('invimport_id_return', $invImportOrdersReturns->id)->sum('total_product_price');
+        Supplier_details::create([
+            'invimport_id' => $invImportOrdersReturns->invimport_id,
+            'cash_balance_debit' => $sum_total_product_price,
+            'supplier_id' => $invImportOrdersReturns->supplier_id,
+            'flag' => 3,
+            'note' => 'مرتجع اذن رقم' . $invImportOrdersReturns->id,
+        ]);
 
         DB::commit();
     } catch (\Throwable $th) {
         DB::rollBack();
         throw $th;
-    
     }
 
-         return redirect(route('invImportOrdersReturns.index'))->with('success', trans('تنبيه...تم تعديل مرتجع بنجاح'));  
-    }
+    return redirect(route('invImportOrdersReturns.index'))->with('success', trans('تنبيه...تم تعديل مرتجع بنجاح'));
+}
 
     public function destroy($id)
     {

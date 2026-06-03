@@ -92,58 +92,6 @@ class Inv_importOrderController extends AppBaseController
      *
      * @return Response
      */
-//     public function store(CreateInv_importOrderRequest $request)
-//     {
-//         // return $request;
-//         // =====================================================================
-//         if(! $request->unit_id){
-//             Flash::error('لم يتم اختيار اصناف');
-//             return redirect(route('invImportOrders.index'));
-//         }
-//         try {
-//             DB::beginTransaction();
-// // -----------------insert Stock in-----------------
-
-//         $input = $request->all();
-   
-          
-//           $input['user_id']=Auth::user()->id;
-//           $input['status']='pending';
-//           $invImportOrder = $this->invImportOrderRepository->create($input);
-  
-//   // -----------------insert StockIn Details-----------------
-//           $data2=[];
-//           for ($i=0; $i <count($request->product_id) ; $i++) { 
-//             $productID =product_color::where('id',$request->product_id[$i])->pluck('product_id');
-//             $product_price = Inv_product::where('id',$productID)->select('product_price')->first()->product_price;
-//               $total_product_price = $product_price * $request->quantity[$i];
-    
-//               $data2[$i]=[
-//                   'invimport_id'=>$invImportOrder->id,
-//                   'product_id'=>$request->product_id[$i],
-//                   'unit_id'=>$request->unit_id[$i],
-//                   'quantity'=>$request->quantity[$i],
-//                 //   'product_price'=>$product_price,
-//                 //   'total_product_price'=>$product_price * $request->quantity[$i],
-//                   'store_id'=>$request->store_id[$i],
-//                   'created_at'=>$invImportOrder->created_at,
-//               ];
-
-//           }
-//           Inv_importorder_details::insert($data2);
-  
-
-     
-       
-//         DB::commit();
-//         } catch (\Throwable $th) {
-//             DB::rollBack();
-//             throw $th;
-        
-//         }
-//         // =====================================================================
-//         return redirect(route('invImportOrders.index'))->with('success', trans('تنبيه...تم حفظ اذن توريد بضاعه بنجاح'));
-//     }
 
 public function store(CreateInv_importOrderRequest $request)
 {

@@ -68,6 +68,9 @@
         <th class="text-center">المتاح</th>
         <th class="text-center">المخزن</th>
         <th class="col-2 text-center">كميه المرتجع</th>
+        @if(isset($invImportOrder_return))
+        <th class="text-center">حذف</th>
+        @endif
 
     </tr>
     @foreach($table_body as $row)
@@ -102,7 +105,6 @@
                 @if (isset($import_order_return_details))
                     @foreach ($import_order_return_details as $detail )
                         @if ($detail['product_id'] == $row->product_id)
-                            {{-- {{ $detail['quantity'] - $row->quantity}} --}}
                             {{ $total -$detail['quantity'] + $row->quantity }}
                         @endif
                     @endforeach   
@@ -114,12 +116,16 @@
                 <input type="text"  name="quantity[]" value="{{$row->quantity}}" class="form-control quantity" style="text-align: center">
                 <span class="error"></span>   
             </td>
+            <td class="text-center">
+                <button type="button" class="btn btn-danger btn-sm remove-row">
+                    <i class="fas fa-trash"></i>
+                </button>
+            </td>
         </tr>
         
     @else
         <tr>
         
-            {{-- <td class="text-center">{{$row->product_color->get_product->invproduct_category->name.' '.$row->product_color->get_product->name.' ('.$row->product_color->get_color->invcolor_category->name.' - '.$row->product_color->get_color->name.")".$row->product_color->get_product->get_size->name." ".$row->product_color->get_product->get_weight->name}}</td> --}}
             <td class="text-center">
                 {{
                     optional($row->product_color)->get_product ? $row->product_color->get_product->manual_code.' '.$row->product_color->get_product->system_code.' '.$row->product_color->get_product->name.' '.
@@ -149,60 +155,3 @@
     
     @endforeach
 </table>
-
-<!-- User Id Field -->
-<div class="col-sm-2">
-    @if(isset($invImportOrder_return))
-    {!! Form::label('user_id', 'مضاف بواسطة:') !!}
-    <span class="border border-lightgray  rounded text-white p-2 d-block text-center" style="width: 100%;background-color: #e0e4e7 !important; color: #504f4f !important;">{{ $invImportOrder_return->get_user->name }}</span>
-    @else
-    {!! Form::label('user_id', 'مضاف بواسطة:') !!}
-    <span class="border border-lightgray  rounded text-white p-2 d-block text-center" style="width: 100%;background-color: #e0e4e7 !important; color: #504f4f !important;">{{ $invImportOrder->get_user->name }}</span>
-    @endif
-</div>
-
-<!-- Created At Field -->
-<div class="col-sm-2">
-       @if(isset($invImportOrder_return))
-    {!! Form::label('created_at', 'تاريخ الانشاء:') !!}
-    <span class="border border-lightgray  rounded text-white p-2 d-block text-center" style="width: 100%;background-color: #e0e4e7 !important; color: #504f4f !important;">{{ $invImportOrder_return->created_at }}</span>
-    @else
-    {!! Form::label('created_at', 'تاريخ الانشاء:') !!}
-    <span class="border border-lightgray  rounded text-white p-2 d-block text-center" style="width: 100%;background-color: #e0e4e7 !important; color: #504f4f !important;">{{ $invImportOrder->created_at }}</span>
-    @endif
-</div>
-
-@if(isset($invImportOrder_return))
-@if(!empty($invImportOrder_return->get_user_update->name))
-<!-- Updated By Field -->
-<div class="col-sm-2">
-    {!! Form::label('updated_by', 'القائم بالتعديل:') !!}
-    <span class="border border-lightgray  rounded text-white p-2 d-block text-center" style="width: 100%;background-color: #e0e4e7 !important; color: #504f4f !important;">{{ $invImportOrder_return->get_user_update->name }}</span>
-</div>
-@endif
-@else
-@if(!empty($invImportOrder->get_user_update->name))
-<div class="col-sm-2">
-    {!! Form::label('updated_by', 'القائم بالتعديل:') !!}
-    <span class="border border-lightgray  rounded text-white p-2 d-block text-center" style="width: 100%;background-color: #e0e4e7 !important; color: #504f4f !important;">{{ $invImportOrder->get_user_update->name }}</span>
-</div>
-@endif
-@endif
-
-@if(isset($invImportOrder_return))
-@if(!empty($invImportOrder_return->get_user_update->name))
-<!-- Updated At Field -->
- <div class="col-sm-2">
-    {!! Form::label('updated_at', 'تاريخ التحديث:') !!}
-    <span class="border border-lightgray  rounded text-white p-2 d-block text-center" style="width: 100%;background-color: #e0e4e7 !important; color: #504f4f !important;">{{ $invImportOrder_return->updated_at }}</span>
-</div>
-@endif
-@else
-@if(!empty($invImportOrder->get_user_update->name))
-<!-- Updated At Field -->
- <div class="col-sm-2">
-    {!! Form::label('updated_at', 'تاريخ التحديث:') !!}
-    <span class="border border-lightgray  rounded text-white p-2 d-block text-center" style="width: 100%;background-color: #e0e4e7 !important; color: #504f4f !important;">{{ $invImportOrder->updated_at }}</span>
-</div>
-@endif
-@endif

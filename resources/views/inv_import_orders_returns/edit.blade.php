@@ -37,7 +37,7 @@
             </div>
 
             <div class="card-footer">
-              {!! Form::submit('حفظ', ['class' => 'btn btn-success btn-sm save']) !!}
+              {!! Form::submit('حفظ', ['class' => 'btn btn-primary btn-sm save']) !!}
                 <a href="{{ route('invImportOrdersReturns.index') }}" class="btn btn-secondary btn-sm">الغاء</a>
             </div>
 
@@ -50,6 +50,17 @@
 @push('page_scripts')
     <script>
         document.addEventListener("DOMContentLoaded", function() {
+            document.addEventListener('click', function(e) {
+                if (e.target.closest('.remove-row')) {
+                    var table = document.querySelector('table.table-border');
+                    var allRows = table.querySelectorAll('tr');
+                    if (allRows.length > 2) {
+                        e.target.closest('tr').remove();
+                    } else {
+                        alert('عفوآ...لا يمكن حذف اخر خامة فى الجدول');
+                    }
+                }
+            });
             document.getElementById('create').addEventListener('submit', function(event) {
                 event.preventDefault();
 
@@ -113,11 +124,10 @@
                         var total = parseFloat(totalElements[i].textContent);
                         var returnDetail = parseFloat(return_detailElements[i].textContent);
 
-                        // if (quantity > total) {
-                        //     showErrorMessage(quantityElements[i], 'عفوآ...كمية المرتجع أكبر من كميه الفاتورة');
-                        //     isValid = false;
-                        // } else if (quantity + returnDetail > total) {
-                        if (quantity > returnDetail) {
+                        if (quantity < 1) {
+                            showErrorMessage(quantityElements[i], 'عفوآ...مسموع بارقام موجب فقط');
+                            isValid = false;
+                        } else if (quantity > returnDetail) {
                             showErrorMessage(quantityElements[i], 'عفوآ...كمية المرتجع أكبر من العدد المتاح');
                             isValid = false;
                         } else {

@@ -43,7 +43,7 @@ class invImportOrders_returnsDataTable extends DataTable
      public function html()
      {
          if (Gate::allows(['invImportOrdersReturns.create'])) {
-             $buttonHtml = '<div class="button-container" >';
+             $buttonHtml = '<div class="button-container" style="padding:0;margin:0;display:inline-block;">';
              $buttonHtml .= '<button type="button" class="btn btn-primary btn-sm no-corner" data-toggle="modal" data-target="#myModal" >';
              $buttonHtml .= '<i class="fas fa-plus"></i> اضافه';
              $buttonHtml .= '</button>';
@@ -69,7 +69,13 @@ class invImportOrders_returnsDataTable extends DataTable
              'dom'       => 'Bfrtip',
              'stateSave' => true,
              'order'     => [[0, 'desc']],
-             'buttons'   => [['text' => $buttonHtml], $buttons],  
+            'buttons'   => array_merge(
+                [[
+                    'text'      => $buttonHtml,
+                    'className' => 'p-0 m-0 border-0 bg-transparent'
+                ]],
+                $buttons
+            ),
              'language'  => ['url' => 'js/translate_data_table.json'],
          ]);
      }

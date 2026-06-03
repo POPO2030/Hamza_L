@@ -1,12 +1,19 @@
-
+<!-- Print Title -->
+<div class="col-sm-12 printable p-10 text-center">
+    تفاصيل اذن مرتجع بضاعة
+</div>
 <!-- Serial Field -->
 <div class="col-sm-2">
     @if(isset($invImportOrder_return))
     {!! Form::label('serial', 'م:') !!}
      <span class="border border-lightgray  rounded text-white p-2 d-block text-center" style="width: 100%;background-color: #e0e4e7 !important; color: #504f4f !important;">{{$invImportOrder_return->id }}</span>
-    @else
-    {!! Form::label('serial', 'م:') !!}
-    <span class="border border-lightgray  rounded text-white p-2 d-block text-center" style="width: 100%;background-color: #e0e4e7 !important; color: #504f4f !important;">{{$invImportOrder->id }}</span>
+    @endif
+</div>
+<!-- Serial Field -->
+<div class="col-sm-2">
+    @if(isset($invImportOrder_return))
+    {!! Form::label('invImportOrder_id', 'اذن الاستلام:') !!}
+    <span class="border border-lightgray  rounded text-white p-2 d-block text-center" style="width: 100%;background-color: #e0e4e7 !important; color: #504f4f !important;">{{$invImportOrder_return->invimport_id }}</span>
     @endif
 </div>
 
