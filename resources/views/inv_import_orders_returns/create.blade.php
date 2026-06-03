@@ -121,6 +121,7 @@
                             showErrorMessage(quantityElements[i], 'عفوآ...كمية المرتجع أكبر من كميه الفاتورة');
                             isValid = false;
                         } else if (quantity + returnDetail > total) {
+                            console.log('quantity: ' + quantity + ', returnDetail: ' + returnDetail + ', total: ' + total);
                             showErrorMessage(quantityElements[i], 'عفوآ...كمية المرتجع أكبر من العدد المتاح');
                             isValid = false;
                         } else {

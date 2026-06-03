@@ -31,12 +31,13 @@ class invImportOrders_returns extends Model
 
     public $fillable = [
         'invimport_id_return',            //id= الاب المرتجع
+        'invimport_id',                  // id = اذن الاستلام
         'date_out',
         'comment',
         'supplier_id',
         'user_id',
         'updated_by',
-        'invimport_id'                  // id = اذن الاستلام
+
     ];
 
     /**
@@ -47,7 +48,6 @@ class invImportOrders_returns extends Model
     protected $casts = [
         'date_out'  => 'date:Y-m-d',
         'comment' => 'string',
-        'customer_id' => 'integer',
         'supplier_id' => 'integer',
         'user_id' => 'integer',
         'updated_by' => 'integer'
@@ -60,14 +60,10 @@ class invImportOrders_returns extends Model
      */
     public static $rules = [
         // 'date_out' => 'required',
-        // 'customer_id' => 'required',
         // 'supplier_id' => 'required',
         // 'updated_by' => 'exit'
     ];
-    public function get_customer()
-    {
-        return $this->belongsTo('App\Models\CRM\Customer','customer_id');
-    }
+
     public function get_supplier()
     {
         return $this->belongsTo('App\Models\CRM\suppliers','supplier_id');

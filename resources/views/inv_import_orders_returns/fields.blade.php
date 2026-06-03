@@ -65,95 +65,86 @@
         <th class="col-3 text-center">المنتج</th>
         <th class="text-center">الوحدة</th>
         <th class="text-center">العدد</th>
-        <th class="text-center">مرتجع سابق</th>
+        <th class="text-center">المتاح</th>
         <th class="text-center">المخزن</th>
         <th class="col-2 text-center">كميه المرتجع</th>
 
     </tr>
     @foreach($table_body as $row)
     @if(isset($invImportOrder_return))
-    <tr>
-       
-        <td class="text-center">
-            
-            {{
-                optional($row->product_color)->get_product ? $row->product_color->get_product->manual_code.' '.$row->product_color->get_product->system_code.' '.$row->product_color->get_product->name.' '.
-                    (optional($row->product_color->get_product)->get_product_description ? $row->product_color->get_product->get_product_description->name : '').'  '.
-                        optional($row->product_color->get_color)->invcolor_category->name.'  '.
-                        optional($row->product_color->get_color)->get_color_code_name : ''
-            }}
-            <input type="hidden" value="{{$row->product_id}}" name ="product_id[]">
-        </td>
-        <td class="text-center">
-            {{$row->get_unit->name}}
-        </td>
-        <td class="text-center total">
-            @php
-            $total=0;
-            for ($i=0; $i <count($inv_importOrder_details) ; $i++) { 
-                if ($row->product_id == $inv_importOrder_details[$i]->product_id ){
-                    $total += $inv_importOrder_details[$i]->quantity;
-                }
-            }
-        @endphp
-        {{ $total }}
-          
-        </td>
+        <tr>
+        
+            <td class="text-center">
+                
+                {{
+                    optional($row->product_color)->get_product ? $row->product_color->get_product->manual_code.' '.$row->product_color->get_product->system_code.' '.$row->product_color->get_product->name.' '.
+                        (optional($row->product_color->get_product)->get_product_description ? $row->product_color->get_product->get_product_description->name : '').'  '.
+                            optional($row->product_color->get_color)->invcolor_category->name.'  '.
+                            optional($row->product_color->get_color)->get_color_code_name : ''
+                }}
+                <input type="hidden" value="{{$row->product_id}}" name ="product_id[]">
+            </td>
+            <td class="text-center">
+                {{$row->get_unit->name}}
+            </td>
+                @php
+                    $total=0;
+                    for ($i=0; $i <count($inv_importOrder_details) ; $i++) { 
+                        if ($row->product_id == $inv_importOrder_details[$i]->product_id ){
+                            $total += $inv_importOrder_details[$i]->quantity;
+                        }
+                    }
+                @endphp
+            <td class="text-center total">
+                {{ $total }}
+            </td>
+            <td class="text-center return_details">
+                @if (isset($import_order_return_details))
+                    @foreach ($import_order_return_details as $detail )
+                        @if ($detail['product_id'] == $row->product_id)
+                            {{-- {{ $detail['quantity'] - $row->quantity}} --}}
+                            {{ $total -$detail['quantity'] + $row->quantity }}
+                        @endif
+                    @endforeach   
+                @endif
+            </td>
 
-        <td class="text-center return_details">
-            @if (isset($import_order_return_details))
-                @foreach ($import_order_return_details as $detail )
-                    @if ($detail['product_id'] == $row->product_id)
-                        {{ $detail['quantity'] - $row->quantity}}
-                    @endif
-                @endforeach
-            @endif
-        </td>
-
-        <td class="text-center">{{$row->get_store->name}}</td>
-        <td class="col-3 text-center">
-            <input type="text"  name="quantity[]" value="{{$row->quantity}}" class="form-control quantity" style="text-align: center">
-            <span class="error"></span>   
-        </td>
-    </tr>
+            <td class="text-center">{{$row->get_store->name}}</td>
+            <td class="col-3 text-center">
+                <input type="text"  name="quantity[]" value="{{$row->quantity}}" class="form-control quantity" style="text-align: center">
+                <span class="error"></span>   
+            </td>
+        </tr>
         
     @else
-    <tr>
-       
-        {{-- <td class="text-center">{{$row->product_color->get_product->invproduct_category->name.' '.$row->product_color->get_product->name.' ('.$row->product_color->get_color->invcolor_category->name.' - '.$row->product_color->get_color->name.")".$row->product_color->get_product->get_size->name." ".$row->product_color->get_product->get_weight->name}}</td> --}}
-        <td class="text-center">
-            {{
-                  optional($row->product_color)->get_product ? $row->product_color->get_product->manual_code.' '.$row->product_color->get_product->system_code.' '.$row->product_color->get_product->name.' '.
-                    (optional($row->product_color->get_product)->get_product_description ? $row->product_color->get_product->get_product_description->name : '').'  '.
-                        optional($row->product_color->get_color)->invcolor_category->name.'  '.
-                        optional($row->product_color->get_color)->get_color_code_name : ''
-            }}
-              <input type="hidden" value="{{$row->product_id}}" name ="product_id[]">
-        </td>
-        <td class="text-center">
-        {{$row->get_unit->name}}
-        </td>
-        <td class="text-center total">
-          
-           {{$row->quantity }}
-        </td>
+        <tr>
+        
+            {{-- <td class="text-center">{{$row->product_color->get_product->invproduct_category->name.' '.$row->product_color->get_product->name.' ('.$row->product_color->get_color->invcolor_category->name.' - '.$row->product_color->get_color->name.")".$row->product_color->get_product->get_size->name." ".$row->product_color->get_product->get_weight->name}}</td> --}}
+            <td class="text-center">
+                {{
+                    optional($row->product_color)->get_product ? $row->product_color->get_product->manual_code.' '.$row->product_color->get_product->system_code.' '.$row->product_color->get_product->name.' '.
+                        (optional($row->product_color->get_product)->get_product_description ? $row->product_color->get_product->get_product_description->name : '').'  '.
+                            optional($row->product_color->get_color)->invcolor_category->name.'  '.
+                            optional($row->product_color->get_color)->get_color_code_name : ''
+                }}
+                <input type="hidden" value="{{$row->product_id}}" name ="product_id[]">
+            </td>
+            <td class="text-center">
+            {{$row->get_unit->name}}
+            </td>
+            <td class="text-center total">
+            {{$row->quantity }}
+            </td>
+            <td class="text-center return_details">
+                    {{ $row->quantity }} 
+            </td>
 
-        <td class="text-center return_details">
-            @if (isset($import_order_return_details))
-                @foreach ($import_order_return_details as $detail )
-                    @if ($detail['product_id'] == $row->product_id)
-                        {{ $detail['quantity']}}
-                    @endif
-                @endforeach
-            @endif
-        </td>
-
-        <td class="text-center">{{$row->get_store->name}}</td>
-       <td class="text-center">
-            <input type="text"  name="quantity[]" class="form-control quantity" style="text-align: center">
-            <span class="error"></span>
-        </td>
-    </tr>
+            <td class="text-center">{{$row->get_store->name}}</td>
+            <td class="text-center">
+                <input type="text"  name="quantity[]" class="form-control quantity" style="text-align: center">
+                <span class="error"></span>
+            </td>
+        </tr>
     @endif
     
     @endforeach

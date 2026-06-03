@@ -15,36 +15,63 @@
             font-size: 24px;
             font-weight: bolder;
         }
-   @media print {
-        @page {
-        size: A4;
-        margin: 10 !important;
-        padding: 5 !important;
-    }
+ @media print {
+            @page {
+                size: A4 !important;
+                margin: 0 !important; 
+            }
+            body {
+                background-color: white !important;
+                zoom: 90% !important;
+            }
+            body * {
+                visibility: hidden !important;
+            }
 
-        .header, .main-footer, .mb-2{
-            display: none;
-        }
-        .content-wrapper{
-        margin: 0 !important;
-        background-color: white !important;
-        transform: scale(0.81); /* 81% scaling */
-        transform-origin: top right; 
-         }
-         
-       .main-sidebar{
-        display: none !important;
-        }
+            .content.px-3 {
+                visibility: visible !important;
+            }
 
-        .content{
-            background-color: white !important;
-        }
-      
+
+            .content.px-3 * {
+                visibility: visible !important;
+            }
+
+            /* Display .content.px-3 in full, and adjust layout for printing */
+            .content.px-3 {
+                position: absolute;
+                top: 0;
+                left: 20% !important;
+                /* right: -100% !important; */
+                width: 80% !important;
+                margin: 0 !important;
+                background-color: white !important;
+                padding: 5px !important;
+            }
+            /* Hide header, footer, sidebar, etc. */
+            .header, .main-footer, .footer, .sidebar, .fixed-plugin, .navbar {
+                display: none !important;
+            }
+
         .col-sm-12.printable.p-10{
             padding: 5 !important;
             display: block;
             font-size: 24px;
             font-weight: bolder;
+            margin-bottom: 10px;
+        }
+        label {
+            font-size: 16px !important;
+        }
+
+        .no-print {
+            display: none !important;
+        }
+
+      /* Add this to make background graphics visible */
+      * {
+                -webkit-print-color-adjust: exact !important;
+                print-color-adjust: exact !important;
         }
 
 }
@@ -67,7 +94,7 @@
                     </div>
                     <div class="col-sm-6">
                         <a class="btn btn-primary btn-sm float-left"
-                           href="{{ route('invImportOrders.index') }}">
+                           href="{{ route('invImportOrdersReturns.index') }}">
                             عوده
                         </a>
                         <button class="btn btn-primary btn-sm float-left" onclick="window.print()" style="margin-left: 10px;"> طباعه </button>
