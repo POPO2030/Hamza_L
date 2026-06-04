@@ -74,6 +74,7 @@
                     <th>الوزن</th>
                     <th>عدد الاكياس</th>
                     <th>المتبقى</th>
+                    <th>تاريخ التغليف</th>
                     <th>عرض</th>
                 </tr>
                 @if(isset($result))
@@ -148,6 +149,7 @@
                             {{ $item->get_count_product->product_count -  $total_package}}
                         </td>
                         
+                        <td>{{ $item->created_at }}</td>
                         
                         <td> 
                             <a href="{{ URL('workOrders', $item->work_order_id) }}" class="btn btn-link btn-default btn-just-icon" >

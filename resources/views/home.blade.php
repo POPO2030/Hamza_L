@@ -336,8 +336,16 @@ $table2 .= '</table>';
                                   </div>
                                   <div class="card-footer">
                                     <div class="stats">
-                                      <i class="material-icons text-info">info</i>
-                                      <a href="#">معلومات أكثر...</a>
+                                      {{-- <i class="material-icons text-info">info</i> --}}
+                                      {{-- <a href="#">معلومات أكثر...</a> --}}
+                                       <form method="post" action="{{ route('ready_store_logs_result') }}" style="display: block; position: relative; padding: 3px 0;  text-align: center;">
+                                        @csrf
+                                        <input type="hidden"  name="from"  value="{{ now()->subDay()->setTime(7, 0)->format('Y-m-d H:i:s') }}">
+                                        <input type="hidden"  name="to"  value="{{ now()->setTime(7, 0)->format('Y-m-d H:i:s') }}">
+                                        <button type="submit" class="small-box-footer" style="background: none; border: none; text-align: center; color: rgb(156, 39, 176); ">
+                                           <i class="material-icons text-info">info</i> معلومات أكثر...
+                                        </button>
+                                      </form>  
                                     </div>
                                   </div>
                                 </div>

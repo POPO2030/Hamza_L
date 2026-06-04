@@ -336,6 +336,9 @@ Route::get('/accreports', 'CRM\ReportAccController@index')->name('accreports')->
 Route::post('readyfollowup_report/','CRM\ReportsController@readyreports_result')->name('readyfollowup_report')->middleware('can:readyfollowup_report');
 Route::get('/readyreports', 'CRM\ReportsController@readyreports_view')->name('readyreports')->middleware('can:readyreports.index');
 
+Route::get('/ready_store_logs', 'CRM\ReportsController@ready_store_logs')->name('ready_store_logs');
+Route::post('ready_store_logs_result/','CRM\ReportsController@ready_store_logs_result')->name('ready_store_logs_result')->middleware('can:readyreports.index');
+
 Route::post('reports_stages_result/','CRM\ReportsController@reports_stages_result')->name('reports_stages_result')->middleware('can:reports_stages_result');
 Route::get('/reports_stages', 'CRM\ReportsController@reports_stages')->name('reports_stages')->middleware('can:reports_stages');
 

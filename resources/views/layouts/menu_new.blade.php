@@ -653,6 +653,17 @@
                   @endcan
                 </li>
 
+                <li class="nav-item {{cuurentroute('ready_store_logs','active')}}">
+                  @can('readyreports.index')
+                  <a href="{{ route('ready_store_logs') }}"
+                  class="nav-link {{ Request::is('ready_store_logs*') ? 'active' : '' }}" >
+                  <i class="fas fa-search"></i>
+                      <span class="menu-item-text">تقرير Logs مخزن الجاهز</span>
+                  </a>
+                  @endcan
+                </li>
+
+                
                 <li class="nav-item {{cuurentroute('residual','active')}}">
                   @can('residual')
                   <a href="{{ route('residual') }}"

@@ -1284,6 +1284,122 @@ public function reports_stages()
         ]);
     }
 
+
+    // ---------تقرير logs المخزن ---------------------
+    public function ready_store_logs(Request $request){
+    
+        return view('crm_views.ready_store_logs')->with([
+        ]);
+
+    }
+
+    public function ready_store_logs_result(Request $request)
+    {
+        $stage_dyeing_ids = Stage::where('stage_category_id', 7)->pluck('id')->toArray();
+        $stage_jeans_ids = Stage::whereIn('stage_category_id', [1, 2, 3, 5, 6, 18, 29, 30])->pluck('id')->toArray();
+        $stage_washing_ids = Stage::where('stage_category_id', 4)->pluck('id')->toArray();
+
+        // return $request;
+        $result= Deliver_order::whereBetween('created_at', [$request->from, $request->to])
+        ->with([
+            'get_details',
+            'get_customer:name,id',
+            'get_products:name,id',
+            'get_work_order.get_ReceiveReceipt:id,model,product_type',
+            'get_work_order.get_work_order_stage.get_service_item',
+        ])
+        ->get();
+
+
+        $washing_total = 0;
+        $dyeing_total = 0;
+        $jeans_total = 0;
+        $total_pieces = 0;
+        $total_packages = 0;
+        $fashion_total = 0;
+
+        foreach($result as $item){
+            $hasWashing = false;
+            $hasDyeing = false;
+            $hasJeans = false; 
+            $totalFashion_per_order = 0;
+            $bags=0;
+            $count_pieces=0;
+            
+
+            foreach($item->get_details as $detail){
+                $bags += $detail->package_number;
+                $count_pieces += $detail->total;
+            }
+                $total_pieces += $count_pieces;
+                $total_packages += $bags;
+
+            $processedServiceItems = [];
+            
+            if ($item->get_work_order && $item->get_work_order->get_work_order_stage) {
+                foreach ($item->get_work_order->get_work_order_stage as $stage) {
+                    $stageId = $stage->satge_id;
+                    
+                    if ($stageId && in_array($stageId, $stage_washing_ids)) {
+                        $hasWashing = true;
+                    }
+                    if ($stageId && in_array($stageId, $stage_dyeing_ids)) {
+                        $hasDyeing = true;
+                    }
+                    if ($stageId && in_array($stageId, $stage_jeans_ids)) {
+                        $hasJeans = true;
+                    }
+                    
+                    if ($stage->get_service_item) {
+                        $serviceItemId = $stage->get_service_item->id;
+                        if (!in_array($serviceItemId, $processedServiceItems)) {
+                            $processedServiceItems[] = $serviceItemId;
+                            $servicePrice = (float) ($stage->get_service_item->price ?? 0);
+                            $totalFashion_per_order += $servicePrice;
+                            
+                        }
+                    }
+                }
+            }
+
+            // حساب التصنيف بناءً على الخدمات
+            if ($hasDyeing && !$hasJeans && (float)$totalFashion_per_order <= 0) {
+                // تصنيف الصباغة
+                // قم بزيادة المتغير الخاص بالصباغة
+                $dyeing_total += $count_pieces;
+            } elseif ($hasWashing && !$hasJeans && (float)$totalFashion_per_order <= 0) {
+                // تصنيف الغسيل فقط
+                // قم بزيادة المتغير الخاص بالغسيل
+                $washing_total += $count_pieces;
+            }
+
+            if ((float)$totalFashion_per_order > 0 && !$hasWashing && !$hasDyeing) {
+                // تصنيف الجينز
+                // قم بزيادة المتغير الخاص بالجینز
+                $jeans_total += $count_pieces;
+            }
+
+            // حساب إجمالي الفاشون للإحصائيات
+            if ((float)$totalFashion_per_order > 0) {
+                // قم بزيادة المتغير الخاص بإجمالي الفاشون بعدد المراحل × عدد القطع
+                $fashion_total += ((float)$totalFashion_per_order * $count_pieces);
+            }
+        }
+
+
+        return view('crm_views.ready_store_logs_result')->with([
+            'result' => $result,
+            'washing_total' => $washing_total,
+            'dyeing_total' => $dyeing_total,
+            'jeans_total' => $jeans_total,
+            'total_packages' => $total_packages,
+            'total_pieces' => $total_pieces,
+            'fashion_total' => $fashion_total,
+            'from' => $request->from,
+            'to' => $request->to,
+        ]);
+    }
+
 // ============================================================ For Ajax ========================================================================
     public function get_customers_for_model(Request $request){
         //  return $request->model;
