@@ -118,7 +118,7 @@ table {
 <table  cellspacing="1" id="table1" style="border-collapse: collapse;">
     <tr>
 		<td>
-            <span lang="ar-eg">{{$workOrder->get_products->name}}</span>
+            <span lang="ar-eg">{{$workOrder->get_products->name.($workOrder->get_ReceiveReceipt?->product_type ? ' (' . $workOrder->get_ReceiveReceipt?->product_type . ')' : '')}}</span>
         </td>
 		<td style="border: 1px solid black;"><span lang="ar-eg">تسليم: {{$workOrder->get_receivables->name}}</span></td>
     </tr>

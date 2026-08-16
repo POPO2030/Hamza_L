@@ -147,7 +147,7 @@
             <tr>
                 <td  align="center" style="border: 1px solid black;"><span lang="ar-eg" style="font-size: 24px;">الصنف: </span>
 
-                    <span lang="ar-eg">{{$workOrder->get_products->name}}</span>
+                    <span lang="ar-eg">{{$workOrder->get_products->name.($workOrder->get_ReceiveReceipt?->product_type ? ' (' . $workOrder->get_ReceiveReceipt?->product_type . ')' : '')}}</span>
                 </td>
                 @if (isset($workOrder->get_fabric_source))
                 <td  align="center" style="border: 1px solid black;"><span lang="ar-eg">مصدر القماش: {{$workOrder->get_fabric_source->name}}</span></td>
