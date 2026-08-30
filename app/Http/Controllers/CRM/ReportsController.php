@@ -24,6 +24,8 @@ use App\Models\CRM\FinalDeliver;
 use App\Models\User;
 use Spatie\Activitylog\Models\Activity as ActivityLog;
 use DB;
+use App\Models\CRM\Note;
+
 
 class ReportsController extends Controller
 {
@@ -1311,6 +1313,11 @@ public function reports_stages()
         ->get();
 
 
+          // collect work_order_ids from the result set, then fetch matching notes in one query
+        $work_order_ids = $result->pluck('work_order_id')->filter()->unique()->toArray();
+
+        $notes_grouped = Note::select('work_order_id', 'note')->whereIn('work_order_id', $work_order_ids)->whereIn('creator_team_id', [1,2, 3, 4])->get()->groupBy('work_order_id');
+
         $washing_total = 0;
         $dyeing_total = 0;
         $jeans_total = 0;
@@ -1325,6 +1332,9 @@ public function reports_stages()
             $totalFashion_per_order = 0;
             $bags=0;
             $count_pieces=0;
+
+            // ADD: attach matching notes to the current item
+            $item->notes = $notes_grouped->get($item->work_order_id, collect());
             
 
             foreach($item->get_details as $detail){
@@ -1386,7 +1396,7 @@ public function reports_stages()
             }
         }
 
-
+// return $result;
         return view('crm_views.ready_store_logs_result')->with([
             'result' => $result,
             'washing_total' => $washing_total,
