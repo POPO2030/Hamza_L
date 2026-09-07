@@ -1386,6 +1386,7 @@ public function reports_stages()
             }
         }
 
+        return $result;
 
         return view('crm_views.ready_store_logs_result')->with([
             'result' => $result,
