@@ -122,6 +122,7 @@
                             <th>العميل</th>
                             <th>الصنف</th>
                             <th>اللون</th>
+                            <th>ملاحظات</th>
                             <th>عدد الأكياس</th>
                             <th>الإجمالي</th>
                             <th>عدد الفاشون</th>  <!-- زي ما كان: مجموع أسعار الفاشون -->
@@ -163,6 +164,14 @@
                                     @endforeach
                                     
                                 </td>
+                                <td>
+                                    @if(isset($item->notes) && $item->notes->isNotEmpty())
+                                        @foreach($item->notes as $note)
+                                           <span class="badge badge-light text-dark" style="margin: 2px; padding: 5px; border: 1px solid #ccc; display:inline-block; border-radius: 4px;">
+                                                {{ $note->note }}
+                                            </span>
+                                        @endforeach
+                                    @endif
                                 <td>{{ number_format($count_bags) }}</td>
                                 <td>{{ number_format($count_pieces) }}</td>
                                 <td>{{ number_format($count_fashion) }}</td> 
